@@ -5,15 +5,12 @@ import { Eye, EyeOff, AlertCircle, ArrowRight, Store, Check } from "lucide-react
 const inputClass =
     "w-full rounded-xl border border-[#d0d5dd] bg-white px-4 py-3 text-sm text-[#1a2231] placeholder-[#98a2b3] outline-none transition focus:border-[#1a2231] focus:ring-2 focus:ring-[#1a2231]/10";
 
-export default function SignUp() {
+export default function SignUp({ onNavigate }) {
     const [form, setForm] = useState({
-        name: "",
         email: "",
         password: "",
-        password_confirmation: "",
     });
     const [showPassword, setShowPassword] = useState(false);
-    const [showConfirm, setShowConfirm] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
@@ -24,23 +21,28 @@ export default function SignUp() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (form.password !== form.password_confirmation) {
-            setError("Passwords do not match.");
-            return;
-        }
         setLoading(true);
         setError("");
         try {
-            await axios.post("/api/auth/signup", form);
-            window.location.href = "/merchant/dashboard";
+            const { data } = await axios.post("/api/auth/signup", form);
+            localStorage.setItem("auth_token", data.token);
+            localStorage.setItem("user", JSON.stringify(data.user));
+            window.axios.defaults.headers.common.Authorization = `Bearer ${data.token}`;
+            if (typeof onNavigate === "function") {
+                onNavigate("/merchant/dashboard");
+            } else {
+                window.location.href = "/merchant/dashboard";
+            }
         } catch (err) {
-            setError(err?.response?.data?.message || "Failed to create account. Please try again.");
+            setError(
+                err?.response?.data?.message ||
+                err?.response?.data?.errors?.email?.[0] ||
+                err?.response?.data?.errors?.password?.[0] ||
+                "Failed to create account. Please try again."
+            );
             setLoading(false);
         }
     };
-
-    const passwordsMatch =
-        form.password && form.password_confirmation && form.password === form.password_confirmation;
 
     const perks = [
         "Manage unlimited products & categories",
@@ -102,11 +104,6 @@ export default function SignUp() {
                         ))}
                     </ul>
 
-                    {/* Trust badge */}
-                    <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2">
-                        <span className="flex h-2 w-2 rounded-full bg-[#12b76a]" />
-                        <span className="text-xs font-medium text-white/70">Free to get started — no credit card needed</span>
-                    </div>
                 </div>
 
                 {/* Bottom */}
@@ -138,22 +135,6 @@ export default function SignUp() {
                     {/* Form card */}
                     <div className="rounded-2xl border border-[#e4e7ec] bg-white p-6 shadow-sm">
                         <form onSubmit={handleSubmit} className="space-y-4">
-
-                            {/* Full Name */}
-                            <div>
-                                <label className="mb-1.5 block text-sm font-medium text-[#344054]">
-                                    Full Name <span className="text-[#f04438]">*</span>
-                                </label>
-                                <input
-                                    type="text"
-                                    name="name"
-                                    value={form.name}
-                                    onChange={handleChange}
-                                    required
-                                    placeholder="John Doe"
-                                    className={inputClass}
-                                />
-                            </div>
 
                             {/* Email */}
                             <div>
@@ -194,41 +175,6 @@ export default function SignUp() {
                                         {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
                                     </button>
                                 </div>
-                            </div>
-
-                            {/* Confirm Password */}
-                            <div>
-                                <label className="mb-1.5 block text-sm font-medium text-[#344054]">
-                                    Confirm Password <span className="text-[#f04438]">*</span>
-                                </label>
-                                <div className="relative">
-                                    <input
-                                        type={showConfirm ? "text" : "password"}
-                                        name="password_confirmation"
-                                        value={form.password_confirmation}
-                                        onChange={handleChange}
-                                        required
-                                        placeholder="Re-enter your password"
-                                        className={inputClass + " pr-11"}
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowConfirm(!showConfirm)}
-                                        className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#98a2b3] hover:text-[#667085] transition-colors"
-                                    >
-                                        {showConfirm ? <EyeOff size={17} /> : <Eye size={17} />}
-                                    </button>
-                                </div>
-
-                                {/* Match indicator */}
-                                {form.password_confirmation && (
-                                    <p className={`mt-1.5 flex items-center gap-1.5 text-xs font-medium ${
-                                        passwordsMatch ? "text-[#027a48]" : "text-[#b42318]"
-                                    }`}>
-                                        <span className={`h-1.5 w-1.5 rounded-full ${passwordsMatch ? "bg-[#12b76a]" : "bg-[#f04438]"}`} />
-                                        {passwordsMatch ? "Passwords match" : "Passwords do not match"}
-                                    </p>
-                                )}
                             </div>
 
                             {/* Error */}

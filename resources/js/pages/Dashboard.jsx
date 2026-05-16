@@ -1,4 +1,5 @@
-import { TrendingUp, TrendingDown, ShoppingCart, Users, IndianRupee, Package } from "lucide-react";
+import { useState, useEffect } from "react";
+import { TrendingUp, TrendingDown, ShoppingCart, Users, IndianRupee, Package, Calendar, Clock } from "lucide-react";
 
 // Mini sparkline SVG
 function Sparkline({ color = "#12b76a", down = false }) {
@@ -37,11 +38,10 @@ function BarChart() {
                 <div key={i} className="flex flex-col items-center gap-1 flex-1">
                     <div
                         style={{ height: `${bar.h}%` }}
-                        className={`w-full rounded-t-md transition-all ${
-                            bar.active
-                                ? "bg-[#1a2231]"
-                                : "bg-[#e4e7ec] dark:bg-slate-700"
-                        }`}
+                        className={`w-full rounded-t-md transition-all ${bar.active
+                            ? "bg-[#1a2231]"
+                            : "bg-[#e4e7ec] dark:bg-slate-700"
+                            }`}
                     />
                 </div>
             ))}
@@ -108,11 +108,11 @@ const recentActivity = [
 ];
 
 const statusConfig = {
-    Completed:   { label: "Completed",   dot: "bg-[#12b76a]", text: "text-[#027a48]",  bg: "bg-[#ecfdf3]" },
-    Pending:     { label: "Pending",     dot: "bg-[#f79009]", text: "text-[#b54708]",  bg: "bg-[#fffaeb]" },
-    Cancelled:   { label: "Cancelled",   dot: "bg-[#f04438]", text: "text-[#b42318]",  bg: "bg-[#fef3f2]" },
+    Completed: { label: "Completed", dot: "bg-[#12b76a]", text: "text-[#027a48]", bg: "bg-[#ecfdf3]" },
+    Pending: { label: "Pending", dot: "bg-[#f79009]", text: "text-[#b54708]", bg: "bg-[#fffaeb]" },
+    Cancelled: { label: "Cancelled", dot: "bg-[#f04438]", text: "text-[#b42318]", bg: "bg-[#fef3f2]" },
     "On Progress": { label: "On Progress", dot: "bg-[#465fff]", text: "text-[#3641f5]", bg: "bg-[#ecf3ff]" },
-    "On Hold":   { label: "On Hold",     dot: "bg-[#f79009]", text: "text-[#b54708]",  bg: "bg-[#fffaeb]" },
+    "On Hold": { label: "On Hold", dot: "bg-[#f79009]", text: "text-[#b54708]", bg: "bg-[#fffaeb]" },
 };
 
 function StatusBadge({ status }) {
@@ -126,6 +126,25 @@ function StatusBadge({ status }) {
 }
 
 function Dashboard() {
+    const [dateTime, setDateTime] = useState(new Date());
+
+    useEffect(() => {
+        const timer = setInterval(() => setDateTime(new Date()), 1000);
+        return () => clearInterval(timer);
+    }, []);
+
+    const formattedDate = dateTime.toLocaleDateString("en-US", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+    });
+
+    const formattedTime = dateTime.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+    });
+
     return (
         <main className="p-5 sm:p-6">
             <div className="mx-auto w-full max-w-7xl">
@@ -141,8 +160,16 @@ function Dashboard() {
                         </p>
                     </div>
                     <div className="hidden sm:flex items-center gap-2 text-sm text-[#667085] dark:text-slate-400">
-                        <span className="text-xs font-medium bg-white dark:bg-slate-800 border border-[#e4e7ec] dark:border-slate-700 rounded-lg px-3 py-1.5">
-                            📅 May 2026
+                        <span className="flex items-center gap-3 text-xs font-medium bg-white dark:bg-slate-800 border border-[#e4e7ec] dark:border-slate-700 rounded-lg px-3 py-1.5 shadow-sm">
+                            <span className="flex items-center gap-1.5 text-[#667085] dark:text-slate-400">
+                                <Calendar size={14} className="text-[#12b76a]" />
+                                {formattedDate}
+                            </span>
+                            <span className="h-3 w-[1px] bg-[#e4e7ec] dark:bg-slate-700"></span>
+                            <span className="flex items-center gap-1.5 text-[#667085] dark:text-slate-400">
+                                <Clock size={14} className="text-[#465fff]" />
+                                {formattedTime}
+                            </span>
                         </span>
                     </div>
                 </div>
@@ -201,7 +228,7 @@ function Dashboard() {
                             </div>
                             <button className="flex items-center gap-1.5 rounded-xl border border-[#e4e7ec] dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-medium text-[#667085] dark:text-slate-300 hover:bg-[#f2f4f7] dark:hover:bg-slate-700 transition-colors">
                                 Last Month
-                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
                             </button>
                         </div>
 
@@ -229,7 +256,14 @@ function Dashboard() {
                                     </div>
                                     <div className="min-w-0 flex-1">
                                         <p className="text-sm font-medium text-[#1a2231] dark:text-white truncate">{item.product}</p>
-                                        <p className="text-xs text-[#98a2b3] dark:text-slate-500">{item.id} · {item.date}</p>
+                                        <div className="flex items-center gap-1.5 text-xs text-[#98a2b3] dark:text-slate-500 mb-1">
+                                            <span>{item.id}</span>
+                                            <span>·</span>
+                                            <div className="flex items-center gap-1">
+                                                <Calendar size={10} />
+                                                <span>{item.date}</span>
+                                            </div>
+                                        </div>
                                         <StatusBadge status={item.status} />
                                     </div>
                                 </div>

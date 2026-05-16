@@ -9,7 +9,7 @@ import {
     LogOut,
 } from "lucide-react";
 
-function Sidebar({ sidebarOpen, setSidebarOpen, selectedMenu, onNavigate }) {
+function Sidebar({ sidebarOpen, setSidebarOpen, selectedMenu, onNavigate, user, onLogout }) {
     const mainMenus = [
         {
             title: "Dashboard",
@@ -85,11 +85,14 @@ function Sidebar({ sidebarOpen, setSidebarOpen, selectedMenu, onNavigate }) {
 
             <aside
                 className={`
-                    fixed lg:static z-50 top-0 left-0 flex flex-col h-screen w-64
+                    fixed lg:static z-50 top-0 left-0 flex flex-col h-screen
                     bg-white dark:bg-[#1a2231]
                     border-r border-[#e4e7ec] dark:border-slate-800
-                    transition-transform duration-300
-                    ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
+                    transition-all duration-300 ease-in-out
+                    ${sidebarOpen 
+                        ? "w-64 translate-x-0 opacity-100" 
+                        : "w-0 -translate-x-full lg:translate-x-0 lg:w-0 opacity-0 overflow-hidden"
+                    }
                 `}
             >
                 {/* Logo */}
@@ -141,18 +144,19 @@ function Sidebar({ sidebarOpen, setSidebarOpen, selectedMenu, onNavigate }) {
                 <div className="border-t border-[#e4e7ec] dark:border-slate-800 px-4 py-4">
                     <div className="flex items-center gap-3">
                         <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-[#1a2231] dark:bg-white text-white dark:text-[#1a2231] text-sm font-semibold">
-                            A
+                            {user?.name?.charAt(0).toUpperCase() || "A"}
                         </div>
                         <div className="min-w-0 flex-1">
                             <p className="truncate text-sm font-semibold text-[#1a2231] dark:text-white">
-                                Admin
+                                {user?.name || "Admin"}
                             </p>
                             <p className="truncate text-xs text-[#98a2b3]">
-                                admin@midrix.com
+                                {user?.email || "admin@midrix.com"}
                             </p>
                         </div>
                         <button
-                            className="flex-shrink-0 text-[#98a2b3] hover:text-[#1a2231] dark:hover:text-white transition-colors"
+                            onClick={onLogout}
+                            className="flex-shrink-0 text-[#98a2b3] hover:text-[#f04438] dark:hover:text-[#f04438] transition-colors"
                             title="Logout"
                         >
                             <LogOut size={16} />

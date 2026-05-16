@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return redirect('/merchant/dashboard');
+    return view('welcome');
 });
 
 Route::prefix('merchant')->group(function () {

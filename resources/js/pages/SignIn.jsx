@@ -5,7 +5,7 @@ import { Eye, EyeOff, AlertCircle, ArrowRight, Store } from "lucide-react";
 const inputClass =
     "w-full rounded-xl border border-[#d0d5dd] bg-white px-4 py-3 text-sm text-[#1a2231] placeholder-[#98a2b3] outline-none transition focus:border-[#1a2231] focus:ring-2 focus:ring-[#1a2231]/10";
 
-export default function SignIn() {
+export default function SignIn({ onNavigate }) {
     const [form, setForm] = useState({ email: "", password: "" });
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -21,10 +21,21 @@ export default function SignIn() {
         setLoading(true);
         setError("");
         try {
-            await axios.post("/api/auth/signin", form);
-            window.location.href = "/merchant/dashboard";
+            const { data } = await axios.post("/api/auth/signin", form);
+            localStorage.setItem("auth_token", data.token);
+            localStorage.setItem("user", JSON.stringify(data.user));
+            window.axios.defaults.headers.common.Authorization = `Bearer ${data.token}`;
+            if (typeof onNavigate === "function") {
+                onNavigate("/merchant/dashboard");
+            } else {
+                window.location.href = "/merchant/dashboard";
+            }
         } catch (err) {
-            setError(err?.response?.data?.message || "Invalid email or password.");
+            setError(
+                err?.response?.data?.message ||
+                err?.response?.data?.errors?.email?.[0] ||
+                "Invalid email or password."
+            );
             setLoading(false);
         }
     };

@@ -1,5 +1,6 @@
 import {
     Menu,
+    ArrowLeft,
     Moon,
     Sun,
     Search,
@@ -7,25 +8,19 @@ import {
     ChevronRight,
 } from "lucide-react";
 
-function Header({ selectedMenu, darkMode, setDarkMode, onMenuClick }) {
+function Header({ selectedMenu, darkMode, setDarkMode, sidebarOpen, onMenuClick }) {
     return (
         <header className="sticky top-0 z-30 border-b border-[#e4e7ec] bg-white dark:border-slate-800 dark:bg-[#1a2231] px-5 py-3.5">
             <div className="flex w-full items-center justify-between gap-4">
-                {/* Left: Mobile menu + Breadcrumb */}
-                <div className="flex items-center gap-3 min-w-0">
+                <div className="flex items-center gap-3">
                     <button
-                        className="rounded-lg border border-[#e4e7ec] p-2 text-[#667085] hover:bg-[#f2f4f7] dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors lg:hidden"
+                        className="group flex h-9 w-9 items-center justify-center rounded-lg border border-[#e4e7ec] text-[#667085] hover:bg-[#f2f4f7] dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 transition-all duration-200"
                         onClick={onMenuClick}
                     >
-                        <Menu size={17} />
+                        <div className={`transition-transform duration-300 ${sidebarOpen ? "rotate-0" : "rotate-180"}`}>
+                            {sidebarOpen ? <ArrowLeft size={19} /> : <Menu size={19} />}
+                        </div>
                     </button>
-
-                    {/* Breadcrumb */}
-                    <nav className="flex items-center gap-1.5 text-sm">
-                        <span className="text-[#98a2b3] dark:text-slate-500 font-medium">Main Menu</span>
-                        <ChevronRight size={14} className="text-[#d0d5dd] dark:text-slate-600 flex-shrink-0" />
-                        <span className="font-semibold text-[#1a2231] dark:text-white">{selectedMenu}</span>
-                    </nav>
                 </div>
 
                 {/* Right: Search + actions */}

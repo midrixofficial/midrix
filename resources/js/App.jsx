@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ChevronRight } from "lucide-react";
 import Sidebar from "./pages/Sidebar";
 import Header from "./pages/Header";
 import Dashboard from "./pages/Dashboard";
@@ -21,8 +22,12 @@ const menuByPath = {
 
 export default function App() {
     const [darkMode, setDarkMode] = useState(false);
-    const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [sidebarOpen, setSidebarOpen] = useState(true);
     const [currentPath, setCurrentPath] = useState(window.location.pathname);
+    const [user, setUser] = useState(() => {
+        const savedUser = localStorage.getItem("user");
+        return savedUser ? JSON.parse(savedUser) : null;
+    });
 
     const navigate = (path) => {
         if (!path || path === "#" || path === currentPath) return;
@@ -31,11 +36,82 @@ export default function App() {
         setSidebarOpen(false);
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem("auth_token");
+        localStorage.removeItem("user");
+        setUser(null);
+        navigate("/");
+    };
+
     useEffect(() => {
         const onPopState = () => setCurrentPath(window.location.pathname);
         window.addEventListener("popstate", onPopState);
         return () => window.removeEventListener("popstate", onPopState);
     }, []);
+
+    useEffect(() => {
+        const isAuthPage = currentPath === "/merchant/signin" || currentPath === "/merchant/signup";
+        const isMerchantPage = currentPath.startsWith("/merchant/");
+        const token = localStorage.getItem("auth_token");
+
+        if (isMerchantPage && !isAuthPage && !token) {
+            navigate("/merchant/signin");
+        }
+
+        // Update user state if it changes in localStorage (e.g. after login)
+        const savedUser = localStorage.getItem("user");
+        if (savedUser) {
+            const parsed = JSON.parse(savedUser);
+            if (JSON.stringify(parsed) !== JSON.stringify(user)) {
+                setUser(parsed);
+            }
+        }
+    }, [currentPath]);
+
+    if (currentPath === "/") {
+        const token = localStorage.getItem("auth_token");
+        return (
+            <div className="flex min-h-screen items-center justify-center bg-[#f4f6fb]">
+                <div className="flex items-center gap-4">
+                    {token ? (
+                        <>
+                            <button
+                                type="button"
+                                onClick={() => navigate("/merchant/dashboard")}
+                                className="inline-flex items-center justify-center rounded-xl bg-[#1a2231] px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#344054]"
+                            >
+                                Go to Dashboard
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleLogout}
+                                className="inline-flex items-center justify-center rounded-xl border border-[#d0d5dd] bg-white px-6 py-3 text-sm font-semibold text-[#1a2231] shadow-sm transition-colors hover:bg-[#f2f4f7]"
+                            >
+                                Sign out
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <button
+                                type="button"
+                                onClick={() => navigate("/merchant/signup")}
+                                className="inline-flex items-center justify-center rounded-xl bg-[#1a2231] px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#344054]"
+                            >
+                                Sign up
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => navigate("/merchant/signin")}
+                                className="inline-flex items-center justify-center rounded-xl bg-[#1a2231] px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#344054]"
+                            >
+                                Sign in
+                            </button>
+                        </>
+                    )}
+                </div>
+            </div>
+        );
+    }
 
     // ── Auth pages (no shell) ──────────────────────────────────────
     if (currentPath === "/merchant/signin") return <SignIn onNavigate={navigate} />;
@@ -72,6 +148,8 @@ export default function App() {
                     setSidebarOpen={setSidebarOpen}
                     selectedMenu={selectedMenu}
                     onNavigate={navigate}
+                    user={user}
+                    onLogout={handleLogout}
                 />
 
                 <div className="relative flex min-w-0 flex-1 flex-col overflow-hidden">
@@ -79,9 +157,19 @@ export default function App() {
                         selectedMenu={selectedMenu}
                         darkMode={darkMode}
                         setDarkMode={setDarkMode}
-                        onMenuClick={() => setSidebarOpen(true)}
+                        sidebarOpen={sidebarOpen}
+                        onMenuClick={() => setSidebarOpen(!sidebarOpen)}
                     />
                     <div className="flex-1 overflow-y-auto">
+                        {/* Breadcrumbs */}
+                        <div className="px-5 sm:px-6 pt-5 mx-auto w-full max-w-7xl">
+                            <nav className="flex items-center gap-1.5 text-sm">
+                                <span className="text-[#98a2b3] dark:text-slate-500 font-medium">Main Menu</span>
+                                <ChevronRight size={14} className="text-[#d0d5dd] dark:text-slate-600 flex-shrink-0" />
+                                <span className="font-semibold text-[#1a2231] dark:text-white">{selectedMenu}</span>
+                            </nav>
+                        </div>
+                        
                         {renderPage()}
                     </div>
                 </div>
