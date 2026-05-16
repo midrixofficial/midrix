@@ -8,10 +8,10 @@ echo "Pulling latest code..."
 git pull origin main
 
 echo "Installing PHP dependencies..."
-composer install --no-dev --optimize-autoloader
+COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader --no-interaction
 
 echo "Installing Node dependencies..."
-npm install
+npm ci
 
 echo "Building frontend..."
 npm run build
