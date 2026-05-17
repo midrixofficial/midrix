@@ -7,6 +7,8 @@ import {
     HelpCircle,
     MessageSquare,
     LogOut,
+    Store,
+    Link,
 } from "lucide-react";
 
 function Sidebar({ sidebarOpen, setSidebarOpen, selectedMenu, onNavigate, user, onLogout }) {
@@ -26,13 +28,23 @@ function Sidebar({ sidebarOpen, setSidebarOpen, selectedMenu, onNavigate, user, 
             icon: <Package size={18} />,
             href: "/merchant/product",
         },
+        {
+            title: "Link Generator",
+            icon: <Link size={18} />,
+            href: "/merchant/link-generator",
+        },
+        {
+            title: "Merchant",
+            icon: <Store size={18} />,
+            href: "/merchant/details",
+        },
     ];
 
     const settingMenus = [
         {
             title: "Settings",
             icon: <Settings size={18} />,
-            href: "#",
+            href: "/merchant/settings",
         },
         {
             title: "Support & Help",
@@ -53,7 +65,6 @@ function Sidebar({ sidebarOpen, setSidebarOpen, selectedMenu, onNavigate, user, 
                 type="button"
                 onClick={() => {
                     if (menu.href !== "#") onNavigate?.(menu.href);
-                    setSidebarOpen(false);
                 }}
                 className={`
                     group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium

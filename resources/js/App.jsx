@@ -10,6 +10,10 @@ import Product from "./pages/Product";
 import ProductForm from "./pages/ProductForm";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
+import Profile from "./pages/Profile";
+import MerchantDetails from "./pages/MerchantDetails";
+import Settings from "./pages/Settings";
+import LinkGenerator from "./pages/LinkGenerator";
 
 const menuByPath = {
     "/merchant/dashboard": "Dashboard",
@@ -18,6 +22,10 @@ const menuByPath = {
     "/merchant/category/edit": "Category",
     "/merchant/product": "Product",
     "/merchant/product/create": "Product",
+    "/merchant/profile": "Profile",
+    "/merchant/details": "Merchant",
+    "/merchant/settings": "Settings",
+    "/merchant/link-generator": "Link Generator",
 };
 
 export default function App() {
@@ -33,7 +41,6 @@ export default function App() {
         if (!path || path === "#" || path === currentPath) return;
         window.history.pushState({}, "", path);
         setCurrentPath(path);
-        setSidebarOpen(false);
     };
 
     const handleLogout = () => {
@@ -125,6 +132,7 @@ export default function App() {
             : menuByPath[currentPath] ?? "Dashboard";
 
     const renderPage = () => {
+        if (currentPath === "/merchant/profile") return <Profile onNavigate={navigate} setUser={setUser} />;
         if (currentPath === "/merchant/category/create") return <CategoryCreate onNavigate={navigate} />;
         if (currentPath.startsWith("/merchant/category/edit/")) {
             const categoryId = currentPath.split("/").pop();
@@ -137,6 +145,9 @@ export default function App() {
             return <ProductForm mode="edit" productId={productId} onNavigate={navigate} />;
         }
         if (currentPath === "/merchant/product") return <Product onNavigate={navigate} />;
+        if (currentPath === "/merchant/details") return <MerchantDetails onNavigate={navigate} />;
+        if (currentPath === "/merchant/settings") return <Settings onNavigate={navigate} />;
+        if (currentPath === "/merchant/link-generator") return <LinkGenerator onNavigate={navigate} />;
         return <Dashboard />;
     };
 
@@ -159,6 +170,9 @@ export default function App() {
                         setDarkMode={setDarkMode}
                         sidebarOpen={sidebarOpen}
                         onMenuClick={() => setSidebarOpen(!sidebarOpen)}
+                        onNavigate={navigate}
+                        onLogout={handleLogout}
+                        user={user}
                     />
                     <div className="flex-1 overflow-y-auto">
                         {/* Breadcrumbs */}

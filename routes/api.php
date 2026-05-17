@@ -3,6 +3,7 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MerchantController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -13,7 +14,14 @@ Route::prefix('auth')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/signout', [AuthController::class, 'signout']);
         Route::get('/me', [AuthController::class, 'me']);
+        Route::post('/profile/update', [AuthController::class, 'updateProfile']);
+        Route::post('/profile/password', [AuthController::class, 'updatePassword']);
     });
+});
+
+Route::prefix('open')->group(function () {
+    Route::get('/products', [ProductController::class, 'publicIndex']);
+    Route::get('/products/{id}', [ProductController::class, 'publicShow']);
 });
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -24,4 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/categories/reorder', [CategoryController::class, 'reorder']);
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('products', ProductController::class);
+
+    Route::get('/merchant', [MerchantController::class, 'show']);
+    Route::post('/merchant/update', [MerchantController::class, 'update']);
 });

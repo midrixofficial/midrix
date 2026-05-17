@@ -3,7 +3,6 @@ import axios from "axios";
 import { ArrowLeft, Upload, AlertCircle } from "lucide-react";
 
 const initialForm = {
-    merchant_id: "1",
     name: "",
     description: "",
     image: null,
@@ -44,7 +43,6 @@ function CategoryForm({ mode = "create", categoryId = null, onNavigate }) {
         try {
             const { data } = await axios.get(`/api/categories/${categoryId}`);
             setForm({
-                merchant_id: String(data.merchant_id || "1"),
                 name: data.name || "",
                 description: data.description || "",
                 image: null,
@@ -76,7 +74,6 @@ function CategoryForm({ mode = "create", categoryId = null, onNavigate }) {
         setErrorMessage("");
 
         const payload = new FormData();
-        payload.append("merchant_id", form.merchant_id);
         payload.append("name", form.name);
         payload.append("description", form.description);
         if (form.image) payload.append("image", form.image);
@@ -137,10 +134,6 @@ function CategoryForm({ mode = "create", categoryId = null, onNavigate }) {
                     </div>
 
                     <form className="p-5 space-y-4" onSubmit={handleSubmit}>
-                        <FormField label="Merchant ID" required>
-                            <input name="merchant_id" value={form.merchant_id} onChange={handleChange} required className={inputClass} />
-                        </FormField>
-
                         <FormField label="Category Name" required>
                             <input name="name" value={form.name} onChange={handleChange} required className={inputClass} />
                         </FormField>
