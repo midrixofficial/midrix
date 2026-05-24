@@ -28,14 +28,14 @@ function Sidebar({ sidebarOpen, setSidebarOpen, selectedMenu, onNavigate }) {
             href: "/merchant/product",
         },
         {
-            title: "Link Generator",
-            icon: <Link size={18} />,
-            href: "/merchant/link-generator",
-        },
-        {
             title: "Merchant",
             icon: <Store size={18} />,
             href: "/merchant/details",
+        },
+        {
+            title: "Generate Link",
+            icon: <Link size={18} />,
+            href: "/merchant/generate-link",
         },
     ];
 
@@ -150,7 +150,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, selectedMenu, onNavigate }) {
                     </div>
                 </div>
 
-                </aside>
+            </aside>
         </>
     );
 }

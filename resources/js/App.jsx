@@ -27,7 +27,7 @@ const menuByPath = {
     "/merchant/profile": "Profile",
     "/merchant/details": "Merchant",
     "/merchant/settings": "Settings",
-    "/merchant/link-generator": "Link Generator",
+    "/merchant/generate-link": "Generate Link",
     "/merchant/support": "Support & Help",
     "/merchant/feedback": "Feedback",
 };
@@ -161,7 +161,7 @@ export default function App() {
         if (currentPath === "/merchant/product") return <Product onNavigate={navigate} />;
         if (currentPath === "/merchant/details") return <MerchantDetails onNavigate={navigate} />;
         if (currentPath === "/merchant/settings") return <Settings onNavigate={navigate} />;
-        if (currentPath === "/merchant/link-generator") return <LinkGenerator onNavigate={navigate} />;
+        if (currentPath === "/merchant/generate-link") return <LinkGenerator onNavigate={navigate} />;
         if (currentPath === "/merchant/support") return <Support onNavigate={navigate} />;
         if (currentPath === "/merchant/feedback") return <Feedback onNavigate={navigate} />;
         return <Dashboard />;
