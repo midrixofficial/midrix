@@ -16,6 +16,7 @@ import Settings from "./pages/Settings";
 import LinkGenerator from "./pages/LinkGenerator";
 import Support from "./pages/Support";
 import Feedback from "./pages/Feedback";
+import LandingPage from "./pages/LandingPage";
 
 const menuByPath = {
     "/merchant/dashboard": "Dashboard",
@@ -90,47 +91,12 @@ export default function App() {
     }, [currentPath]);
 
     if (currentPath === "/") {
-        const token = localStorage.getItem("auth_token");
         return (
-            <div className="flex min-h-screen items-center justify-center bg-[#f4f6fb]">
-                <div className="flex items-center gap-4">
-                    {token ? (
-                        <>
-                            <button
-                                type="button"
-                                onClick={() => navigate("/merchant/dashboard")}
-                                className="inline-flex items-center justify-center rounded-xl bg-[#1a2231] px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#344054]"
-                            >
-                                Go to Dashboard
-                            </button>
-                            <button
-                                type="button"
-                                onClick={handleLogout}
-                                className="inline-flex items-center justify-center rounded-xl border border-[#d0d5dd] bg-white px-6 py-3 text-sm font-semibold text-[#1a2231] shadow-sm transition-colors hover:bg-[#f2f4f7]"
-                            >
-                                Sign out
-                            </button>
-                        </>
-                    ) : (
-                        <>
-                            <button
-                                type="button"
-                                onClick={() => navigate("/merchant/signup")}
-                                className="inline-flex items-center justify-center rounded-xl bg-[#1a2231] px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#344054]"
-                            >
-                                Sign up
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => navigate("/merchant/signin")}
-                                className="inline-flex items-center justify-center rounded-xl bg-[#1a2231] px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#344054]"
-                            >
-                                Sign in
-                            </button>
-                        </>
-                    )}
-                </div>
-            </div>
+            <LandingPage
+                onNavigate={navigate}
+                darkMode={darkMode}
+                setDarkMode={setDarkMode}
+            />
         );
     }
 

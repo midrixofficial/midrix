@@ -49,20 +49,38 @@ export default function LinkGenerator({ onNavigate }) {
     const fetchMerchantData = async () => {
         try {
             const { data } = await axios.get("/api/merchant");
+            const tempBrandName = localStorage.getItem("midrix_temp_brand_name");
+            const tempBrandColor = localStorage.getItem("midrix_temp_brand_color");
+            const tempBrandTheme = localStorage.getItem("midrix_temp_brand_theme");
+
+            if (tempBrandTheme) {
+                setThemeMode(tempBrandTheme);
+            }
+
             if (data.merchant) {
-                const businessName = data.merchant.business_name || "My Store";
+                const businessName = data.merchant.business_name || tempBrandName || "My Store";
                 setCustomizer((prev) => ({
                     ...prev,
                     displayName: businessName,
+                    brandColor: tempBrandColor || prev.brandColor,
                     slug: businessName.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
                     businessAddress: data.merchant.business_address || "New Bangalore Service Road, No: 1, Near Green Circle, NH 46 Service Rd, Vellore, Tamil Nadu 632004",
                 }));
             }
         } catch (error) {
+            const tempBrandName = localStorage.getItem("midrix_temp_brand_name");
+            const tempBrandColor = localStorage.getItem("midrix_temp_brand_color");
+            const tempBrandTheme = localStorage.getItem("midrix_temp_brand_theme");
+
+            if (tempBrandTheme) {
+                setThemeMode(tempBrandTheme);
+            }
+
             setCustomizer((prev) => ({
                 ...prev,
-                displayName: "Midrix Store",
-                slug: "midrix-store",
+                displayName: tempBrandName || "Midrix Store",
+                brandColor: tempBrandColor || "#4f46e5",
+                slug: (tempBrandName || "Midrix Store").toLowerCase().replace(/[^a-z0-9]+/g, "-"),
                 businessAddress: "New Bangalore Service Road, No: 1, Near Green Circle, NH 46 Service Rd, Vellore, Tamil Nadu 632004",
             }));
         } finally {

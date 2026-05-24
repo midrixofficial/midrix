@@ -48,10 +48,11 @@ export default function MerchantDetails({ onNavigate }) {
     const fetchMerchantDetails = async () => {
         try {
             const { data } = await axios.get("/api/merchant");
+            const tempBrandName = localStorage.getItem("midrix_temp_brand_name");
             if (data.merchant) {
                 setForm({
                     name: data.merchant.name || "",
-                    business_name: data.merchant.business_name || "",
+                    business_name: data.merchant.business_name || tempBrandName || "",
                     business_mobile: data.merchant.business_mobile || "",
                     business_email: data.merchant.business_email || "",
                     business_address: data.merchant.business_address || "",
