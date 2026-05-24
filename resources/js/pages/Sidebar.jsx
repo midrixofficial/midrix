@@ -49,12 +49,12 @@ function Sidebar({ sidebarOpen, setSidebarOpen, selectedMenu, onNavigate, user, 
         {
             title: "Support & Help",
             icon: <HelpCircle size={18} />,
-            href: "#",
+            href: "/merchant/support",
         },
         {
             title: "Feedback",
             icon: <MessageSquare size={18} />,
-            href: "#",
+            href: "/merchant/feedback",
         },
     ];
 

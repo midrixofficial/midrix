@@ -14,6 +14,8 @@ import Profile from "./pages/Profile";
 import MerchantDetails from "./pages/MerchantDetails";
 import Settings from "./pages/Settings";
 import LinkGenerator from "./pages/LinkGenerator";
+import Support from "./pages/Support";
+import Feedback from "./pages/Feedback";
 
 const menuByPath = {
     "/merchant/dashboard": "Dashboard",
@@ -26,6 +28,8 @@ const menuByPath = {
     "/merchant/details": "Merchant",
     "/merchant/settings": "Settings",
     "/merchant/link-generator": "Link Generator",
+    "/merchant/support": "Support & Help",
+    "/merchant/feedback": "Feedback",
 };
 
 export default function App() {
@@ -148,6 +152,8 @@ export default function App() {
         if (currentPath === "/merchant/details") return <MerchantDetails onNavigate={navigate} />;
         if (currentPath === "/merchant/settings") return <Settings onNavigate={navigate} />;
         if (currentPath === "/merchant/link-generator") return <LinkGenerator onNavigate={navigate} />;
+        if (currentPath === "/merchant/support") return <Support onNavigate={navigate} />;
+        if (currentPath === "/merchant/feedback") return <Feedback onNavigate={navigate} />;
         return <Dashboard />;
     };
 

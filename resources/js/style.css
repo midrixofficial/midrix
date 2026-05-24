@@ -4816,3 +4816,65 @@ span.flatpickr-weekday,
   inherits: false;
 }
 
+/* Premium Custom Scrollbars */
+.overflow-y-auto, 
+.overflow-x-auto,
+aside,
+main,
+div {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(156, 163, 175, 0.2) transparent;
+}
+
+.dark .overflow-y-auto, 
+.dark .overflow-x-auto,
+.dark aside,
+.dark main,
+.dark div {
+  scrollbar-color: rgba(148, 163, 184, 0.15) transparent;
+}
+
+/* Webkit browser custom scrollbars (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.25);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.45);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.15);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.35);
+}
+
+/* Mobile & Tablet View: Hide ugly horizontal table scrollbars completely, support native touch swipe */
+@media (max-width: 1024px) {
+  .overflow-x-auto,
+  table,
+  .overflow-y-auto {
+    scrollbar-width: none !important; /* Firefox */
+    -ms-overflow-style: none !important;  /* IE/Edge */
+  }
+  
+  .overflow-x-auto::-webkit-scrollbar,
+  table::-webkit-scrollbar,
+  .overflow-y-auto::-webkit-scrollbar {
+    display: none !important; /* Chrome, Safari, Opera */
+  }
+}
+
+
