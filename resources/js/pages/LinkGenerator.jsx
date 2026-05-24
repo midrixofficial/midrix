@@ -37,7 +37,7 @@ export default function LinkGenerator({ onNavigate }) {
 
     const [customizer, setCustomizer] = useState({
         displayName: "",
-        tagline: "Order premium products from our catalog online",
+        businessAddress: "New Bangalore Service Road, No: 1, Near Green Circle, NH 46 Service Rd, Vellore, Tamil Nadu 632004",
         brandColor: "#4f46e5",
         slug: "",
     });
@@ -55,6 +55,7 @@ export default function LinkGenerator({ onNavigate }) {
                     ...prev,
                     displayName: businessName,
                     slug: businessName.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+                    businessAddress: data.merchant.business_address || "New Bangalore Service Road, No: 1, Near Green Circle, NH 46 Service Rd, Vellore, Tamil Nadu 632004",
                 }));
             }
         } catch (error) {
@@ -62,6 +63,7 @@ export default function LinkGenerator({ onNavigate }) {
                 ...prev,
                 displayName: "Midrix Store",
                 slug: "midrix-store",
+                businessAddress: "New Bangalore Service Road, No: 1, Near Green Circle, NH 46 Service Rd, Vellore, Tamil Nadu 632004",
             }));
         } finally {
             setLoading(false);
@@ -102,6 +104,8 @@ export default function LinkGenerator({ onNavigate }) {
     const previewStyles = {
         themeColor: customizer.brandColor,
     };
+
+    const svelteAppUrl = `http://localhost:5174/?brandName=${encodeURIComponent(customizer.displayName)}&brandColor=${encodeURIComponent(customizer.brandColor)}&brandAddress=${encodeURIComponent(customizer.businessAddress)}&themeMode=${encodeURIComponent(themeMode)}`;
 
     return (
         <main className="p-5 sm:p-6 lg:p-8">
@@ -196,15 +200,15 @@ export default function LinkGenerator({ onNavigate }) {
 
                                 <div className="space-y-1.5">
                                     <label className="text-xs font-bold text-[#344054] dark:text-slate-300 uppercase tracking-wider">
-                                        Store Description / Tagline
+                                        Business Physical Address
                                     </label>
                                     <textarea
-                                        name="tagline"
-                                        value={customizer.tagline}
+                                        name="businessAddress"
+                                        value={customizer.businessAddress}
                                         onChange={handleTextChange}
                                         rows="2"
                                         className={inputClass + " resize-none"}
-                                        placeholder="Add a friendly description..."
+                                        placeholder="Add physical address..."
                                     ></textarea>
                                 </div>
                             </div>
@@ -314,16 +318,44 @@ export default function LinkGenerator({ onNavigate }) {
                             
                             {/* Device Frame: MOBILE */}
                             {device === "mobile" && (
-                                <div className="w-[340px] h-[580px] border-[10px] border-slate-950 dark:border-slate-800 rounded-[44px] shadow-2xl relative bg-white dark:bg-slate-950 flex flex-col transition-all duration-300 animate-in zoom-in-95">
-                                    {/* Notch */}
-                                    <div className="absolute top-0 inset-x-0 h-6 bg-slate-950 dark:bg-slate-800 rounded-b-3xl w-36 mx-auto z-50 flex items-center justify-center gap-1.5 px-3">
-                                        <div className="h-1.5 w-1.5 rounded-full bg-slate-800"></div>
-                                        <div className="h-1.5 w-12 rounded-full bg-slate-800"></div>
-                                    </div>
+                                <div className="w-[335px] h-[585px] border-[6px] border-slate-950 dark:border-slate-800 rounded-[48px] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.35)] relative bg-white dark:bg-slate-950 flex flex-col transition-all duration-300 animate-in zoom-in-95 ring-1 ring-black/5">
+                                    {/* Ultra-Thin Ear Speaker slot (iPhone 17 design) */}
+                                    <div className="absolute top-[2.5px] left-1/2 -translate-x-1/2 h-[2px] w-12 bg-slate-800 dark:bg-slate-700 rounded-full z-50"></div>
                                     
                                     {/* Screen Content */}
-                                    <div className="flex-1 overflow-y-auto rounded-[32px] overflow-hidden flex flex-col">
-                                        <MockShopfront customizer={customizer} themeMode={themeMode} />
+                                    <div className={`flex-1 rounded-[42px] overflow-hidden flex flex-col h-full w-full ${
+                                        themeMode === 'dark' ? 'bg-[#0f172a]' : themeMode === 'glass' ? 'bg-gradient-to-tr from-sky-100 via-rose-50 to-indigo-50' : 'bg-[#f9f9f9]'
+                                    }`}>
+                                        {/* Premium Status Bar with Integrated Dynamic Island */}
+                                        <div className={`relative flex items-center justify-between px-5 pt-3.5 pb-2.5 select-none text-[10px] font-semibold tracking-tight ${
+                                            themeMode === 'dark' ? 'bg-[#0f172a] text-slate-300 border-b border-slate-800/40' : themeMode === 'glass' ? 'bg-white/20 text-slate-800 border-b border-white/10' : 'bg-[#f9f9f9] text-slate-700 border-b border-slate-200/50'
+                                        }`}>
+                                            {/* Time */}
+                                            <span className="z-10 font-bold">9:41</span>
+                                            
+                                            {/* iPhone 17 Futuristic Micro Dynamic Island */}
+                                            <div className="absolute left-1/2 -translate-x-1/2 top-3 h-3.5 w-11 rounded-full bg-black dark:bg-slate-900 z-20 flex items-center justify-center gap-0.5 shadow-sm border border-white/5">
+                                                <div className="h-1 w-1 rounded-full bg-[#1e293b] dark:bg-[#0f172a]"></div>
+                                                <div className="h-0.5 w-0.5 rounded-full bg-emerald-500/80 animate-pulse"></div>
+                                            </div>
+                                            
+                                            {/* Network & Battery */}
+                                            <div className="flex items-center gap-1 z-10">
+                                                <span>5G</span>
+                                                <svg className="w-2.5 h-2.5 fill-current" viewBox="0 0 24 24">
+                                                    <path d="M12 21l-12-12c4.4-4.4 11.6-4.4 16 0l-4 4c-2.2-2.2-5.8-2.2-8 0l8 8z"/>
+                                                </svg>
+                                                <div className="w-4 h-2.5 border border-current rounded-sm p-0.5 flex items-center">
+                                                    <div className="bg-current h-full w-full rounded-[1px]"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <iframe
+                                            src={svelteAppUrl}
+                                            className="w-full h-full border-none bg-transparent"
+                                            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+                                            title="Customer Shop Preview Mobile"
+                                        />
                                     </div>
                                 </div>
                             )}
@@ -334,9 +366,29 @@ export default function LinkGenerator({ onNavigate }) {
                                     {/* Camera dot */}
                                     <div className="absolute top-[5px] left-1/2 -translate-x-1/2 h-2 w-2 rounded-full bg-slate-800 z-50"></div>
                                     
-                                    {/* Screen Content */}
-                                    <div className="flex-1 overflow-y-auto rounded-[24px] overflow-hidden flex flex-col">
-                                        <MockShopfront customizer={customizer} themeMode={themeMode} />
+                                    {/* Screen Content with Status Bar Spacer */}
+                                    <div className={`flex-1 rounded-[24px] overflow-hidden flex flex-col h-full w-full pt-4 ${
+                                        themeMode === 'dark' ? 'bg-[#0f172a]' : themeMode === 'glass' ? 'bg-gradient-to-tr from-sky-100 via-rose-50 to-indigo-50' : 'bg-[#f9f9f9]'
+                                    }`}>
+                                        {/* Premium Tablet Status Bar */}
+                                        <div className={`flex items-center justify-between px-6 py-1 select-none text-[10px] font-bold ${
+                                            themeMode === 'dark' ? 'bg-[#0f172a] text-slate-300 border-b border-slate-800/60' : themeMode === 'glass' ? 'bg-white/30 text-slate-700 border-b border-white/20' : 'bg-[#f9f9f9] text-slate-600 border-b border-slate-200/60'
+                                        }`}>
+                                            <span>iPad</span>
+                                            <span>9:41 AM</span>
+                                            <div className="flex items-center gap-1.5">
+                                                <svg className="w-2.5 h-2.5 fill-current" viewBox="0 0 24 24">
+                                                    <path d="M12 21l-12-12c4.4-4.4 11.6-4.4 16 0l-4 4c-2.2-2.2-5.8-2.2-8 0l8 8z"/>
+                                                </svg>
+                                                <span>100%</span>
+                                            </div>
+                                        </div>
+                                        <iframe
+                                            src={svelteAppUrl}
+                                            className="w-full h-full border-none bg-transparent"
+                                            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+                                            title="Customer Shop Preview Tablet"
+                                        />
                                     </div>
                                 </div>
                             )}
@@ -357,8 +409,13 @@ export default function LinkGenerator({ onNavigate }) {
                                     </div>
                                     
                                     {/* Browser Content */}
-                                    <div className="flex-1 overflow-y-auto flex flex-col">
-                                        <MockShopfront customizer={customizer} themeMode={themeMode} isDesktop />
+                                    <div className="flex-1 overflow-hidden flex flex-col h-full w-full">
+                                        <iframe
+                                            src={svelteAppUrl}
+                                            className="w-full h-full border-none bg-transparent"
+                                            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+                                            title="Customer Shop Preview Desktop"
+                                        />
                                     </div>
                                 </div>
                             )}
@@ -444,7 +501,7 @@ function MockShopfront({ customizer, themeMode, isDesktop = false }) {
                     {customizer.displayName || "My Shop"}
                 </h2>
                 <p className={`text-xs max-w-md mx-auto ${textMuted}`}>
-                    {customizer.tagline || "Order premium products from our catalog online"}
+                    {customizer.businessAddress || "New Bangalore Service Road, No: 1, Near Green Circle, NH 46 Service Rd, Vellore, Tamil Nadu 632004"}
                 </p>
                 <div className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[10px] font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 mt-2">
                     <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
