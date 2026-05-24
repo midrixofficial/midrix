@@ -6,12 +6,11 @@ import {
     Settings,
     HelpCircle,
     MessageSquare,
-    LogOut,
     Store,
     Link,
 } from "lucide-react";
 
-function Sidebar({ sidebarOpen, setSidebarOpen, selectedMenu, onNavigate, user, onLogout }) {
+function Sidebar({ sidebarOpen, setSidebarOpen, selectedMenu, onNavigate }) {
     const mainMenus = [
         {
             title: "Dashboard",
@@ -151,30 +150,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, selectedMenu, onNavigate, user, 
                     </div>
                 </div>
 
-                {/* User Profile */}
-                <div className="border-t border-[#e4e7ec] dark:border-slate-800 px-4 py-4">
-                    <div className="flex items-center gap-3">
-                        <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-[#1a2231] dark:bg-white text-white dark:text-[#1a2231] text-sm font-semibold">
-                            {user?.name?.charAt(0).toUpperCase() || "A"}
-                        </div>
-                        <div className="min-w-0 flex-1">
-                            <p className="truncate text-sm font-semibold text-[#1a2231] dark:text-white">
-                                {user?.name || "Admin"}
-                            </p>
-                            <p className="truncate text-xs text-[#98a2b3]">
-                                {user?.email || "admin@midrix.com"}
-                            </p>
-                        </div>
-                        <button
-                            onClick={onLogout}
-                            className="flex-shrink-0 text-[#98a2b3] hover:text-[#f04438] dark:hover:text-[#f04438] transition-colors"
-                            title="Logout"
-                        >
-                            <LogOut size={16} />
-                        </button>
-                    </div>
-                </div>
-            </aside>
+                </aside>
         </>
     );
 }

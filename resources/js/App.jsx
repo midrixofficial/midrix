@@ -33,7 +33,12 @@ const menuByPath = {
 };
 
 export default function App() {
-    const [darkMode, setDarkMode] = useState(false);
+    const [darkMode, setDarkMode] = useState(() => {
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme === "dark") return true;
+        if (savedTheme === "light") return false;
+        return window.matchMedia("(prefers-color-scheme: dark)").matches;
+    });
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const [currentPath, setCurrentPath] = useState(window.location.pathname);
     const [user, setUser] = useState(() => {
@@ -59,6 +64,11 @@ export default function App() {
         window.addEventListener("popstate", onPopState);
         return () => window.removeEventListener("popstate", onPopState);
     }, []);
+
+    useEffect(() => {
+        document.documentElement.classList.toggle("dark", darkMode);
+        localStorage.setItem("theme", darkMode ? "dark" : "light");
+    }, [darkMode]);
 
     useEffect(() => {
         const isAuthPage = currentPath === "/merchant/signin" || currentPath === "/merchant/signup";
@@ -158,15 +168,12 @@ export default function App() {
     };
 
     return (
-        <div className={darkMode ? "dark" : ""}>
-            <div className="flex h-screen overflow-hidden bg-[#f4f6fb] text-[#1a2231] dark:bg-[#0f1117] dark:text-slate-100">
+        <div className="flex h-screen overflow-hidden bg-[#f4f6fb] text-[#1a2231] dark:bg-[#0f1117] dark:text-slate-100">
                 <Sidebar
                     sidebarOpen={sidebarOpen}
                     setSidebarOpen={setSidebarOpen}
                     selectedMenu={selectedMenu}
                     onNavigate={navigate}
-                    user={user}
-                    onLogout={handleLogout}
                 />
 
                 <div className="relative flex min-w-0 flex-1 flex-col overflow-hidden">
@@ -193,7 +200,6 @@ export default function App() {
                         {renderPage()}
                     </div>
                 </div>
-            </div>
         </div>
     );
 }
