@@ -1,4 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(ScrollTrigger);
 import {
     Store,
     ArrowRight,
@@ -33,6 +38,79 @@ const colorPresets = [
 
 export default function LandingPage({ onNavigate, darkMode, setDarkMode }) {
     // Sandbox State
+    const containerRef = useRef(null);
+
+    useGSAP(() => {
+        // Hero Animation
+        const tlHero = gsap.timeline();
+        tlHero.from(".hero-badge", { y: -20, opacity: 0, duration: 0.6, ease: "back.out(1.5)", delay: 0.2 })
+              .from(".hero-title", { y: 40, opacity: 0, duration: 0.8, ease: "power3.out" }, "-=0.4")
+              .from(".hero-desc", { y: 20, opacity: 0, duration: 0.6, ease: "power2.out" }, "-=0.6")
+              .from(".hero-actions", { y: 20, opacity: 0, duration: 0.6, stagger: 0.1, ease: "power2.out" }, "-=0.4")
+              .from(".hero-indicators", { opacity: 0, x: -10, duration: 0.6, stagger: 0.1 }, "-=0.3");
+
+        // Ambient Glows continuous floating
+        gsap.to(".ambient-glow", {
+            y: "random(-30, 30)",
+            x: "random(-30, 30)",
+            duration: "random(3, 6)",
+            ease: "sine.inOut",
+            repeat: -1,
+            yoyo: true,
+            stagger: 0.5
+        });
+
+        // Interactive Sandbox ScrollTrigger
+        gsap.from(".sandbox-header", {
+            scrollTrigger: { trigger: ".sandbox-section", start: "top 80%" },
+            y: 30, opacity: 0, duration: 0.8, ease: "power2.out"
+        });
+        
+        gsap.from(".sandbox-controls", {
+            scrollTrigger: { trigger: ".sandbox-section", start: "top 70%" },
+            x: -50, opacity: 0, duration: 0.8, ease: "power3.out"
+        });
+        
+        gsap.from(".sandbox-mockup", {
+            scrollTrigger: { trigger: ".sandbox-section", start: "top 70%" },
+            scale: 0.8, opacity: 0, duration: 1, ease: "back.out(1.2)"
+        });
+
+        // Features Grid Stagger
+        gsap.from(".feature-card", {
+            scrollTrigger: { trigger: ".features-section", start: "top 75%" },
+            y: 40, opacity: 0, duration: 0.6, stagger: 0.1, ease: "power2.out"
+        });
+
+        // Workflow Stepper
+        const tlWorkflow = gsap.timeline({
+            scrollTrigger: { trigger: ".workflow-section", start: "top 75%" }
+        });
+        
+        tlWorkflow.from(".workflow-header", { y: 30, opacity: 0, duration: 0.6 })
+                  .from(".workflow-line", { scaleX: 0, transformOrigin: "left center", duration: 1, ease: "power2.inOut" }, "-=0.2")
+                  .from(".workflow-step", { scale: 0.8, opacity: 0, duration: 0.5, stagger: 0.2, ease: "back.out(1.5)" }, "-=0.8");
+
+        // Testimonials
+        gsap.from(".testimonial-card", {
+            scrollTrigger: { trigger: ".testimonials-section", start: "top 75%" },
+            y: 30, opacity: 0, duration: 0.6, stagger: 0.15, ease: "power2.out"
+        });
+
+        // FAQ
+        gsap.from(".faq-item", {
+            scrollTrigger: { trigger: ".faq-section", start: "top 80%" },
+            x: -20, opacity: 0, duration: 0.5, stagger: 0.1, ease: "power2.out"
+        });
+
+        // Urgency Banner Parallax
+        gsap.from(".urgency-banner", {
+            scrollTrigger: { trigger: ".urgency-section", start: "top 90%", end: "bottom center", scrub: 1 },
+            scale: 0.9, opacity: 0.5
+        });
+
+    }, { scope: containerRef });
+
     const [storeName, setStoreName] = useState("Gourmet Cafe");
     const [brandColor, setBrandColor] = useState("#4f46e5");
     const [themeMode, setThemeMode] = useState("glass"); // light | dark | glass
@@ -109,13 +187,13 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode }) {
     const textMuted = themeMode === "dark" ? "text-slate-400" : "text-[#667085]";
 
     return (
-        <div className="min-h-screen bg-[#f4f6fb] dark:bg-[#0f1117] text-[#1a2231] dark:text-slate-100 overflow-x-hidden selection:bg-[#1a2231] selection:text-white dark:selection:bg-white dark:selection:text-[#1a2231]">
+        <div ref={containerRef} className="min-h-screen bg-[#f4f6fb] dark:bg-[#0f1117] text-[#1a2231] dark:text-slate-100 overflow-x-hidden selection:bg-[#1a2231] selection:text-white dark:selection:bg-white dark:selection:text-[#1a2231]">
             
             {/* Ambient Background Glows */}
             <div className="absolute top-[10%] left-1/2 -translate-x-1/2 w-full max-w-7xl h-[600px] pointer-events-none z-0">
-                <div className="absolute top-12 left-10 w-[350px] h-[350px] rounded-full bg-indigo-400/10 dark:bg-indigo-500/15 blur-[120px] animate-pulse" />
-                <div className="absolute top-48 right-12 w-[350px] h-[350px] rounded-full bg-rose-400/10 dark:bg-rose-500/10 blur-[120px] animate-pulse" style={{ animationDelay: '2s' }} />
-                <div className="absolute bottom-10 left-1/3 w-[300px] h-[300px] rounded-full bg-sky-400/10 dark:bg-sky-500/10 blur-[100px] animate-pulse" style={{ animationDelay: '4s' }} />
+                <div className="ambient-glow absolute top-12 left-10 w-[350px] h-[350px] rounded-full bg-indigo-400/10 dark:bg-indigo-500/15 blur-[120px]" />
+                <div className="ambient-glow absolute top-48 right-12 w-[350px] h-[350px] rounded-full bg-rose-400/10 dark:bg-rose-500/10 blur-[120px]" style={{ animationDelay: '2s' }} />
+                <div className="ambient-glow absolute bottom-10 left-1/3 w-[300px] h-[300px] rounded-full bg-sky-400/10 dark:bg-sky-500/10 blur-[100px]" style={{ animationDelay: '4s' }} />
             </div>
 
             {/* ── STICKY GLASSMORPHIC HEADER ── */}
@@ -174,26 +252,26 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode }) {
                 <div className="mx-auto max-w-7xl text-center space-y-8">
                     
                     {/* Badge */}
-                    <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/20 bg-indigo-500/5 px-4 py-1.5 text-xs font-semibold text-indigo-600 dark:text-indigo-400 shadow-sm animate-bounce">
+                    <div className="hero-badge inline-flex items-center gap-2 rounded-full border border-indigo-500/20 bg-indigo-500/5 px-4 py-1.5 text-xs font-semibold text-indigo-600 dark:text-indigo-400 shadow-sm animate-bounce">
                         <Sparkles size={13} className="fill-current" />
                         <span>The Ultimate Merchant Digital Menu Platform</span>
                     </div>
 
                     {/* Main Title */}
                     <div className="max-w-4xl mx-auto space-y-4">
-                        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-[#1a2231] dark:text-white leading-[1.1] font-sans">
+                        <h1 className="hero-title text-4xl sm:text-6xl font-extrabold tracking-tight text-[#1a2231] dark:text-white leading-[1.1] font-sans">
                             Turn Your Menu Into A Gorgeous{" "}
                             <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-rose-500 bg-clip-text text-transparent dark:from-indigo-400 dark:via-purple-400 dark:to-rose-400">
                                 Digital Checkout Link
                             </span>
                         </h1>
-                        <p className="text-md sm:text-xl text-[#667085] dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
+                        <p className="hero-desc text-md sm:text-xl text-[#667085] dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
                             Claim your custom URL slug, set up your menu card in seconds, customize colors and glassmorphic designs, and accept direct, zero-commission customer orders instantly.
                         </p>
                     </div>
 
                     {/* Primary actions */}
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto pt-2">
+                    <div className="hero-actions flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto pt-2">
                         <a
                             href="#demo"
                             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl bg-[#1a2231] dark:bg-white text-white dark:text-[#1a2231] px-8 py-4 text-sm font-bold shadow-lg shadow-slate-900/10 dark:shadow-white/5 hover:scale-[1.03] active:scale-[0.97] transition-all hover:bg-slate-800 dark:hover:bg-slate-100"
@@ -210,7 +288,7 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode }) {
                     </div>
 
                     {/* Visual indicators */}
-                    <div className="flex items-center justify-center gap-8 pt-4 text-xs font-semibold text-[#98a2b3] dark:text-slate-500">
+                    <div className="hero-indicators flex items-center justify-center gap-8 pt-4 text-xs font-semibold text-[#98a2b3] dark:text-slate-500">
                         <div className="flex items-center gap-1.5">
                             <Check size={14} className="text-emerald-500" />
                             <span>No Credit Card Required</span>
@@ -225,10 +303,10 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode }) {
             </section>
 
             {/* ── LIVE INTERACTIVE BRAND SANDBOX (THE WOW FACTOR) ── */}
-            <section id="demo" className="relative z-10 py-16 px-6 border-t border-[#e4e7ec]/60 dark:border-slate-800/40">
+            <section id="demo" className="sandbox-section relative z-10 py-16 px-6 border-t border-[#e4e7ec]/60 dark:border-slate-800/40">
                 <div className="mx-auto max-w-7xl">
                     
-                    <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
+                    <div className="sandbox-header text-center max-w-3xl mx-auto mb-16 space-y-3">
                         <div className="inline-flex items-center gap-1.5 rounded-full bg-rose-500/10 dark:bg-rose-500/15 px-3 py-1 text-xs font-semibold text-rose-600 dark:text-rose-400">
                             <Flame size={12} className="fill-current" />
                             <span>Try It Live</span>
@@ -245,7 +323,7 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode }) {
                     <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 items-start">
                         
                         {/* LEFT Controls (5 Columns) */}
-                        <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-24">
+                        <div className="sandbox-controls lg:col-span-5 space-y-6 lg:sticky lg:top-24">
                             
                             {/* Card 1: Brand details config */}
                             <div className="rounded-2xl border border-[#e4e7ec] bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 space-y-6 transition-colors">
@@ -367,7 +445,7 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode }) {
                         </div>
 
                         {/* RIGHT Viewport Mockup (7 Columns) */}
-                        <div className="lg:col-span-7 flex flex-col items-center">
+                        <div className="sandbox-mockup lg:col-span-7 flex flex-col items-center">
                             
                             {/* Visual Indicator of Simulator */}
                             <div className="mb-4 flex items-center gap-2 text-xs font-semibold text-[#98a2b3] dark:text-slate-500">
@@ -519,7 +597,7 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode }) {
             </section>
 
             {/* ── FEATURES BENTO GRID ── */}
-            <section id="features" className="relative z-10 py-16 px-6 bg-slate-50 dark:bg-slate-900/30 border-t border-b border-[#e4e7ec]/60 dark:border-slate-800/40">
+            <section id="features" className="features-section relative z-10 py-16 px-6 bg-slate-50 dark:bg-slate-900/30 border-t border-b border-[#e4e7ec]/60 dark:border-slate-800/40">
                 <div className="mx-auto max-w-7xl">
                     
                     <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
@@ -539,7 +617,7 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode }) {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         
                         {/* Feature 1: Custom Slug */}
-                        <div className="rounded-2xl border border-[#e4e7ec] bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 hover:shadow-md hover:scale-[1.01] transition-all duration-300">
+                        <div className="feature-card rounded-2xl border border-[#e4e7ec] bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 hover:shadow-md hover:scale-[1.01] transition-all duration-300">
                             <div className="h-10 w-10 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-4">
                                 <Share2 size={20} />
                             </div>
@@ -550,7 +628,7 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode }) {
                         </div>
 
                         {/* Feature 2: High-Fidelity Previews */}
-                        <div className="rounded-2xl border border-[#e4e7ec] bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 hover:shadow-md hover:scale-[1.01] transition-all duration-300">
+                        <div className="feature-card rounded-2xl border border-[#e4e7ec] bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 hover:shadow-md hover:scale-[1.01] transition-all duration-300">
                             <div className="h-10 w-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-4">
                                 <Smartphone size={20} />
                             </div>
@@ -561,7 +639,7 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode }) {
                         </div>
 
                         {/* Feature 3: Design Customizer */}
-                        <div className="rounded-2xl border border-[#e4e7ec] bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 hover:shadow-md hover:scale-[1.01] transition-all duration-300">
+                        <div className="feature-card rounded-2xl border border-[#e4e7ec] bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 hover:shadow-md hover:scale-[1.01] transition-all duration-300">
                             <div className="h-10 w-10 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center mb-4">
                                 <Layers size={20} />
                             </div>
@@ -572,7 +650,7 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode }) {
                         </div>
 
                         {/* Feature 4: Order Dashboard */}
-                        <div className="rounded-2xl border border-[#e4e7ec] bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 hover:shadow-md hover:scale-[1.01] transition-all duration-300 md:col-span-2 lg:col-span-1">
+                        <div className="feature-card rounded-2xl border border-[#e4e7ec] bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 hover:shadow-md hover:scale-[1.01] transition-all duration-300 md:col-span-2 lg:col-span-1">
                             <div className="h-10 w-10 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-4">
                                 <TrendingUp size={20} />
                             </div>
@@ -583,7 +661,7 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode }) {
                         </div>
 
                         {/* Feature 5: Security */}
-                        <div className="rounded-2xl border border-[#e4e7ec] bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 hover:shadow-md hover:scale-[1.01] transition-all duration-300">
+                        <div className="feature-card rounded-2xl border border-[#e4e7ec] bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 hover:shadow-md hover:scale-[1.01] transition-all duration-300">
                             <div className="h-10 w-10 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center mb-4">
                                 <Shield size={20} />
                             </div>
@@ -594,7 +672,7 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode }) {
                         </div>
 
                         {/* Feature 6: Customer Support */}
-                        <div className="rounded-2xl border border-[#e4e7ec] bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 hover:shadow-md hover:scale-[1.01] transition-all duration-300">
+                        <div className="feature-card rounded-2xl border border-[#e4e7ec] bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 hover:shadow-md hover:scale-[1.01] transition-all duration-300">
                             <div className="h-10 w-10 rounded-xl bg-sky-500/10 text-sky-600 dark:text-sky-400 flex items-center justify-center mb-4">
                                 <Sparkles size={20} />
                             </div>
@@ -610,10 +688,10 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode }) {
             </section>
 
             {/* ── VISUAL STEPPER (HOW IT WORKS) ── */}
-            <section id="how-it-works" className="relative z-10 py-16 px-6">
+            <section id="how-it-works" className="workflow-section relative z-10 py-16 px-6">
                 <div className="mx-auto max-w-7xl">
                     
-                    <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
+                    <div className="workflow-header text-center max-w-3xl mx-auto mb-16 space-y-3">
                         <div className="inline-flex items-center gap-1.5 rounded-full bg-[#1a2231]/5 dark:bg-white/10 px-3 py-1 text-xs font-semibold text-[#1a2231] dark:text-white">
                             <span>Workflow</span>
                         </div>
@@ -629,10 +707,10 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode }) {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
                         
                         {/* Connecting Line (for large displays) */}
-                        <div className="hidden md:block absolute top-1/2 left-20 right-20 h-0.5 bg-[#e4e7ec] dark:bg-slate-800 -translate-y-1/2 z-0" />
+                        <div className="workflow-line hidden md:block absolute top-1/2 left-20 right-20 h-0.5 bg-[#e4e7ec] dark:bg-slate-800 -translate-y-1/2 z-0" />
 
                         {/* Step 1 */}
-                        <div className="rounded-2xl border border-[#e4e7ec] bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 text-center relative z-10 space-y-3 transition-colors">
+                        <div className="workflow-step rounded-2xl border border-[#e4e7ec] bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 text-center relative z-10 space-y-3 transition-colors">
                             <div className="h-10 w-10 rounded-full bg-[#1a2231] dark:bg-white text-white dark:text-[#1a2231] font-bold text-sm flex items-center justify-center mx-auto shadow-sm">
                                 1
                             </div>
@@ -643,7 +721,7 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode }) {
                         </div>
 
                         {/* Step 2 */}
-                        <div className="rounded-2xl border border-[#e4e7ec] bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 text-center relative z-10 space-y-3 transition-colors">
+                        <div className="workflow-step rounded-2xl border border-[#e4e7ec] bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 text-center relative z-10 space-y-3 transition-colors">
                             <div className="h-10 w-10 rounded-full bg-[#1a2231] dark:bg-white text-white dark:text-[#1a2231] font-bold text-sm flex items-center justify-center mx-auto shadow-sm">
                                 2
                             </div>
@@ -654,7 +732,7 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode }) {
                         </div>
 
                         {/* Step 3 */}
-                        <div className="rounded-2xl border border-[#e4e7ec] bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 text-center relative z-10 space-y-3 transition-colors">
+                        <div className="workflow-step rounded-2xl border border-[#e4e7ec] bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 text-center relative z-10 space-y-3 transition-colors">
                             <div className="h-10 w-10 rounded-full bg-[#1a2231] dark:bg-white text-white dark:text-[#1a2231] font-bold text-sm flex items-center justify-center mx-auto shadow-sm">
                                 3
                             </div>
@@ -670,7 +748,7 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode }) {
             </section>
 
             {/* ── CUSTOMER TESTIMONIALS ── */}
-            <section id="testimonials" className="relative z-10 py-16 px-6 bg-slate-50 dark:bg-slate-900/30 border-t border-b border-[#e4e7ec]/60 dark:border-slate-800/40">
+            <section id="testimonials" className="testimonials-section relative z-10 py-16 px-6 bg-slate-50 dark:bg-slate-900/30 border-t border-b border-[#e4e7ec]/60 dark:border-slate-800/40">
                 <div className="mx-auto max-w-7xl">
                     
                     <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
@@ -689,7 +767,7 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode }) {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         
                         {/* Testimonial 1 */}
-                        <div className="rounded-2xl border border-[#e4e7ec] bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 space-y-4 transition-colors">
+                        <div className="testimonial-card rounded-2xl border border-[#e4e7ec] bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 space-y-4 transition-colors">
                             <div className="flex gap-0.5 text-amber-400">
                                 {[...Array(5)].map((_, i) => <Star key={i} size={15} fill="currentColor" />)}
                             </div>
@@ -708,7 +786,7 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode }) {
                         </div>
 
                         {/* Testimonial 2 */}
-                        <div className="rounded-2xl border border-[#e4e7ec] bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 space-y-4 transition-colors">
+                        <div className="testimonial-card rounded-2xl border border-[#e4e7ec] bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 space-y-4 transition-colors">
                             <div className="flex gap-0.5 text-amber-400">
                                 {[...Array(5)].map((_, i) => <Star key={i} size={15} fill="currentColor" />)}
                             </div>
@@ -727,7 +805,7 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode }) {
                         </div>
 
                         {/* Testimonial 3 */}
-                        <div className="rounded-2xl border border-[#e4e7ec] bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 space-y-4 transition-colors">
+                        <div className="testimonial-card rounded-2xl border border-[#e4e7ec] bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 space-y-4 transition-colors">
                             <div className="flex gap-0.5 text-amber-400">
                                 {[...Array(5)].map((_, i) => <Star key={i} size={15} fill="currentColor" />)}
                             </div>
@@ -751,7 +829,7 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode }) {
             </section>
 
             {/* ── INTERACTIVE FAQ SECTION ── */}
-            <section id="faq" className="relative z-10 py-16 px-6">
+            <section id="faq" className="faq-section relative z-10 py-16 px-6">
                 <div className="mx-auto max-w-4xl">
                     
                     <div className="text-center max-w-3xl mx-auto mb-12 space-y-3">
@@ -785,7 +863,7 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode }) {
                         ].map((faq, idx) => (
                             <div
                                 key={idx}
-                                className="rounded-2xl border border-[#e4e7ec] dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden transition-all duration-300"
+                                className="faq-item rounded-2xl border border-[#e4e7ec] dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden transition-all duration-300"
                             >
                                 <button
                                     type="button"
@@ -814,8 +892,8 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode }) {
             </section>
 
             {/* ── URGENCY FINAL CTA BANNER ── */}
-            <section className="relative z-10 py-16 px-6">
-                <div className="mx-auto max-w-5xl rounded-3xl bg-[#1a2231] dark:bg-slate-900 border border-slate-800 p-8 sm:p-12 text-center text-white relative overflow-hidden shadow-xl">
+            <section className="urgency-section relative z-10 py-16 px-6">
+                <div className="urgency-banner mx-auto max-w-5xl rounded-3xl bg-[#1a2231] dark:bg-slate-900 border border-slate-800 p-8 sm:p-12 text-center text-white relative overflow-hidden shadow-xl">
                     
                     {/* Background Dot pattern */}
                     <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
