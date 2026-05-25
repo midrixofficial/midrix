@@ -29,9 +29,9 @@ export default function SignUp({ onNavigate }) {
             localStorage.setItem("user", JSON.stringify(data.user));
             window.axios.defaults.headers.common.Authorization = `Bearer ${data.token}`;
             if (typeof onNavigate === "function") {
-                onNavigate("/merchant/dashboard");
+                onNavigate("/merchant/onboarding");
             } else {
-                window.location.href = "/merchant/dashboard";
+                window.location.href = "/merchant/onboarding";
             }
         } catch (err) {
             setError(

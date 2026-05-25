@@ -202,7 +202,6 @@ export default function MerchantDetails({ onNavigate }) {
                                             name="business_mobile"
                                             value={form.business_mobile}
                                             onChange={handleChange}
-                                            required
                                             placeholder="+91 98765 43210"
                                             className={inputClass}
                                         />

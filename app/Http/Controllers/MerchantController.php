@@ -39,7 +39,7 @@ class MerchantController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'business_name' => ['required', 'string', 'max:255'],
-            'business_mobile' => ['required', 'string', 'max:20'],
+            'business_mobile' => ['nullable', 'string', 'max:20'],
             'business_email' => ['nullable', 'email', 'max:255'],
             'business_address' => ['nullable', 'string'],
             'store_status' => ['nullable', 'string', 'in:open,closed'],

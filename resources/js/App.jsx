@@ -10,6 +10,7 @@ import Product from "./pages/Product";
 import ProductForm from "./pages/ProductForm";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
+import Onboarding from "./pages/Onboarding";
 import Profile from "./pages/Profile";
 import MerchantDetails from "./pages/MerchantDetails";
 import Settings from "./pages/Settings";
@@ -103,6 +104,7 @@ export default function App() {
     // ── Auth pages (no shell) ──────────────────────────────────────
     if (currentPath === "/merchant/signin") return <SignIn onNavigate={navigate} />;
     if (currentPath === "/merchant/signup") return <SignUp onNavigate={navigate} />;
+    if (currentPath === "/merchant/onboarding") return <Onboarding onNavigate={navigate} />;
 
     // ── Admin shell ────────────────────────────────────────────────
     const selectedMenu = currentPath.startsWith("/merchant/product/edit/")
