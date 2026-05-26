@@ -7,6 +7,7 @@ import {
     HelpCircle,
     Store,
     Link,
+    ShoppingCart,
 } from "lucide-react";
 
 function Sidebar({ sidebarOpen, setSidebarOpen, selectedMenu, onNavigate }) {
@@ -35,6 +36,11 @@ function Sidebar({ sidebarOpen, setSidebarOpen, selectedMenu, onNavigate }) {
             title: "Generate Link",
             icon: <Link size={18} />,
             href: "/merchant/generate-link",
+        },
+        {
+            title: "Orders",
+            icon: <ShoppingCart size={18} />,
+            href: "/merchant/orders",
         },
     ];
 

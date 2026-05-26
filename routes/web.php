@@ -21,3 +21,8 @@ Route::post('/deploy', function () {
         'output' => $output
     ]);
 });
+
+// Svelte Storefront Route: dynamic root slug, excluding reserved paths
+Route::get('/{merchant_slug}', function ($merchant_slug) {
+    return view('customer', ['slug' => $merchant_slug]);
+})->where('merchant_slug', '^(?!merchant|api|deploy-panel|deploy|sanctum|_ignition).*$');

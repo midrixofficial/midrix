@@ -16,6 +16,7 @@ import MerchantDetails from "./pages/MerchantDetails";
 import Settings from "./pages/Settings";
 import LinkGenerator from "./pages/LinkGenerator";
 import Support from "./pages/Support";
+import Orders from "./pages/Orders";
 import LandingPage from "./pages/LandingPage";
 
 const menuByPath = {
@@ -30,6 +31,7 @@ const menuByPath = {
     "/merchant/settings": "Settings",
     "/merchant/generate-link": "Generate Link",
     "/merchant/support": "Support & Help",
+    "/merchant/orders": "Orders",
 };
 
 export default function App() {
@@ -130,6 +132,7 @@ export default function App() {
         if (currentPath === "/merchant/settings") return <Settings onNavigate={navigate} />;
         if (currentPath === "/merchant/generate-link") return <LinkGenerator onNavigate={navigate} />;
         if (currentPath === "/merchant/support") return <Support onNavigate={navigate} />;
+        if (currentPath === "/merchant/orders") return <Orders onNavigate={navigate} />;
         return <Dashboard user={user} />;
     };
 

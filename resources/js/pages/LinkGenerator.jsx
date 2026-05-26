@@ -89,7 +89,7 @@ export default function LinkGenerator({ onNavigate }) {
     };
 
     const handleCopy = () => {
-        const url = `https://midrix.com/store/${customizer.slug}`;
+        const url = `${window.location.origin}/${customizer.slug}`;
         navigator.clipboard.writeText(url);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
@@ -123,7 +123,7 @@ export default function LinkGenerator({ onNavigate }) {
         themeColor: customizer.brandColor,
     };
 
-    const svelteAppUrl = `http://localhost:5174/?brandName=${encodeURIComponent(customizer.displayName)}&brandColor=${encodeURIComponent(customizer.brandColor)}&brandAddress=${encodeURIComponent(customizer.businessAddress)}&themeMode=${encodeURIComponent(themeMode)}`;
+    const svelteAppUrl = `/${customizer.slug}?brandName=${encodeURIComponent(customizer.displayName)}&brandColor=${encodeURIComponent(customizer.brandColor)}&brandAddress=${encodeURIComponent(customizer.businessAddress)}&themeMode=${encodeURIComponent(themeMode)}`;
 
     return (
         <main className="p-5 sm:p-6 lg:p-8">
@@ -161,7 +161,7 @@ export default function LinkGenerator({ onNavigate }) {
                             <div className="space-y-4">
                                 <div className="flex rounded-xl border border-[#d0d5dd] dark:border-slate-700 bg-[#f9fafb] dark:bg-slate-800 overflow-hidden">
                                     <span className="flex items-center px-3.5 bg-slate-100 dark:bg-slate-700 border-r border-[#d0d5dd] dark:border-slate-700 text-xs font-semibold text-[#667085] dark:text-slate-400 select-none">
-                                        midrix.com/store/
+                                        {window.location.host}/
                                     </span>
                                     <input
                                         type="text"
@@ -422,7 +422,7 @@ export default function LinkGenerator({ onNavigate }) {
                                             <div className="h-3 w-3 rounded-full bg-[#12b76a]"></div>
                                         </div>
                                         <div className="flex-1 max-w-sm rounded-lg bg-white dark:bg-slate-800 px-3 py-1 text-center text-xs font-medium text-[#667085] dark:text-slate-400 border border-slate-200 dark:border-slate-700 truncate select-none">
-                                            https://midrix.com/store/{customizer.slug}
+                                            {window.location.host}/{customizer.slug}
                                         </div>
                                     </div>
                                     
