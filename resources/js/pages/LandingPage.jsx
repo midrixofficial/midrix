@@ -36,7 +36,7 @@ const colorPresets = [
     { name: "Deep Slate", hex: "#1e293b", bg: "bg-[#1e293b]" },
 ];
 
-export default function LandingPage({ onNavigate, darkMode, setDarkMode }) {
+export default function LandingPage({ onNavigate, darkMode, setDarkMode, user }) {
     // Sandbox State
     const containerRef = useRef(null);
 
@@ -127,14 +127,24 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode }) {
         setOpenFaq(openFaq === index ? null : index);
     };
 
+    const getInitials = (name) => {
+        if (!name) return "M";
+        return name
+            .split(" ")
+            .map((n) => n[0])
+            .join("")
+            .toUpperCase()
+            .slice(0, 2);
+    };
+
     const handleClaimStore = () => {
         // Save temporary branding options to localStorage for seamless onboarding pre-fill
         localStorage.setItem("midrix_temp_brand_name", storeName);
         localStorage.setItem("midrix_temp_brand_color", brandColor);
         localStorage.setItem("midrix_temp_brand_theme", themeMode);
         
-        // Navigate to signup
-        onNavigate("/merchant/signup");
+        // Navigate to signup or dashboard
+        onNavigate(user ? "/merchant/dashboard" : "/merchant/signup");
     };
 
     // Simulated Product Data
@@ -229,19 +239,31 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode }) {
                             {darkMode ? <Sun size={17} className="text-amber-400" /> : <Moon size={17} />}
                         </button>
 
-                        <button
-                            onClick={() => onNavigate("/merchant/signin")}
-                            className="hidden sm:inline-flex text-sm font-semibold text-[#667085] hover:text-[#1a2231] dark:text-slate-300 dark:hover:text-white px-3 py-2 transition-colors"
-                        >
-                            Sign In
-                        </button>
-                        
-                        <button
-                            onClick={() => onNavigate("/merchant/signup")}
-                            className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#1a2231] text-white dark:bg-white dark:text-[#1a2231] px-5 py-2.5 text-xs sm:text-sm font-bold shadow-sm hover:shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all"
-                        >
-                            Get Started Free
-                        </button>
+                        {user ? (
+                            <button
+                                onClick={() => onNavigate("/merchant/dashboard")}
+                                className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#1a2231] text-white dark:bg-white dark:text-[#1a2231] px-5 py-2.5 text-xs sm:text-sm font-bold shadow-sm hover:shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all"
+                            >
+                                Dashboard
+                                <ArrowRight size={14} />
+                            </button>
+                        ) : (
+                            <>
+                                <button
+                                    onClick={() => onNavigate("/merchant/signin")}
+                                    className="hidden sm:inline-flex text-sm font-semibold text-[#667085] hover:text-[#1a2231] dark:text-slate-300 dark:hover:text-white px-3 py-2 transition-colors"
+                                >
+                                    Sign In
+                                </button>
+                                
+                                <button
+                                    onClick={() => onNavigate("/merchant/signup")}
+                                    className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#1a2231] text-white dark:bg-white dark:text-[#1a2231] px-5 py-2.5 text-xs sm:text-sm font-bold shadow-sm hover:shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all"
+                                >
+                                    Get Started Free
+                                </button>
+                            </>
+                        )}
                     </div>
 
                 </div>
@@ -272,19 +294,39 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode }) {
 
                     {/* Primary actions */}
                     <div className="hero-actions flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto pt-2">
-                        <a
-                            href="#demo"
-                            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl bg-[#1a2231] dark:bg-white text-white dark:text-[#1a2231] px-8 py-4 text-sm font-bold shadow-lg shadow-slate-900/10 dark:shadow-white/5 hover:scale-[1.03] active:scale-[0.97] transition-all hover:bg-slate-800 dark:hover:bg-slate-100"
-                        >
-                            Try Sandbox Simulator
-                            <ArrowRight size={16} />
-                        </a>
-                        <button
-                            onClick={() => onNavigate("/merchant/signup")}
-                            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl border border-[#d0d5dd] dark:border-slate-800 bg-white dark:bg-slate-900 text-[#1a2231] dark:text-white px-8 py-4 text-sm font-bold shadow-sm hover:bg-[#f9fafb] dark:hover:bg-slate-800 transition-colors"
-                        >
-                            Quick SignUp
-                        </button>
+                        {user ? (
+                            <>
+                                <button
+                                    onClick={() => onNavigate("/merchant/dashboard")}
+                                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl bg-[#1a2231] dark:bg-white text-white dark:text-[#1a2231] px-8 py-4 text-sm font-bold shadow-lg shadow-slate-900/10 dark:shadow-white/5 hover:scale-[1.03] active:scale-[0.97] transition-all hover:bg-slate-800 dark:hover:bg-slate-100"
+                                >
+                                    Go to Dashboard
+                                    <ArrowRight size={16} />
+                                </button>
+                                <a
+                                    href="#demo"
+                                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl border border-[#d0d5dd] dark:border-slate-800 bg-white dark:bg-slate-900 text-[#1a2231] dark:text-white px-8 py-4 text-sm font-bold shadow-sm hover:bg-[#f9fafb] dark:hover:bg-slate-800 transition-colors"
+                                >
+                                    Try Sandbox Simulator
+                                </a>
+                            </>
+                        ) : (
+                            <>
+                                <a
+                                    href="#demo"
+                                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl bg-[#1a2231] dark:bg-white text-white dark:text-[#1a2231] px-8 py-4 text-sm font-bold shadow-lg shadow-slate-900/10 dark:shadow-white/5 hover:scale-[1.03] active:scale-[0.97] transition-all hover:bg-slate-800 dark:hover:bg-slate-100"
+                                >
+                                    Try Sandbox Simulator
+                                    <ArrowRight size={16} />
+                                </a>
+                                <button
+                                    onClick={() => onNavigate("/merchant/signup")}
+                                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl border border-[#d0d5dd] dark:border-slate-800 bg-white dark:bg-slate-900 text-[#1a2231] dark:text-white px-8 py-4 text-sm font-bold shadow-sm hover:bg-[#f9fafb] dark:hover:bg-slate-800 transition-colors"
+                                >
+                                    Quick SignUp
+                                </button>
+                            </>
+                        )}
                     </div>
 
                     {/* Visual indicators */}

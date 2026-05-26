@@ -5,7 +5,6 @@ import {
     X,
     Settings,
     HelpCircle,
-    MessageSquare,
     Store,
     Link,
 } from "lucide-react";
@@ -49,11 +48,6 @@ function Sidebar({ sidebarOpen, setSidebarOpen, selectedMenu, onNavigate }) {
             title: "Support & Help",
             icon: <HelpCircle size={18} />,
             href: "/merchant/support",
-        },
-        {
-            title: "Feedback",
-            icon: <MessageSquare size={18} />,
-            href: "/merchant/feedback",
         },
     ];
 

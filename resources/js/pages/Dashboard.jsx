@@ -125,7 +125,7 @@ function StatusBadge({ status }) {
     );
 }
 
-function Dashboard() {
+function Dashboard({ user }) {
     const [dateTime, setDateTime] = useState(new Date());
 
     useEffect(() => {
@@ -153,7 +153,7 @@ function Dashboard() {
                 <div className="mb-6 flex items-start justify-between">
                     <div>
                         <h1 className="text-2xl font-bold text-[#1a2231] dark:text-white">
-                            Welcome, Admin 👋
+                            Welcome, {user?.name || "Admin"} 👋
                         </h1>
                         <p className="mt-1 text-sm text-[#667085] dark:text-slate-400">
                             Manage orders, track products, and grow your business — all in one place.

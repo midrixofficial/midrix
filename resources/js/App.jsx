@@ -16,7 +16,6 @@ import MerchantDetails from "./pages/MerchantDetails";
 import Settings from "./pages/Settings";
 import LinkGenerator from "./pages/LinkGenerator";
 import Support from "./pages/Support";
-import Feedback from "./pages/Feedback";
 import LandingPage from "./pages/LandingPage";
 
 const menuByPath = {
@@ -31,7 +30,6 @@ const menuByPath = {
     "/merchant/settings": "Settings",
     "/merchant/generate-link": "Generate Link",
     "/merchant/support": "Support & Help",
-    "/merchant/feedback": "Feedback",
 };
 
 export default function App() {
@@ -97,6 +95,7 @@ export default function App() {
                 onNavigate={navigate}
                 darkMode={darkMode}
                 setDarkMode={setDarkMode}
+                user={user}
             />
         );
     }
@@ -131,8 +130,7 @@ export default function App() {
         if (currentPath === "/merchant/settings") return <Settings onNavigate={navigate} />;
         if (currentPath === "/merchant/generate-link") return <LinkGenerator onNavigate={navigate} />;
         if (currentPath === "/merchant/support") return <Support onNavigate={navigate} />;
-        if (currentPath === "/merchant/feedback") return <Feedback onNavigate={navigate} />;
-        return <Dashboard />;
+        return <Dashboard user={user} />;
     };
 
     return (
