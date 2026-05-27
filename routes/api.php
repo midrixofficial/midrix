@@ -24,6 +24,7 @@ Route::prefix('auth')->group(function () {
 Route::prefix('open')->group(function () {
     Route::get('/products', [ProductController::class, 'publicIndex']);
     Route::get('/products/{id}', [ProductController::class, 'publicShow']);
+    Route::post('/orders', [OrderController::class, 'storeOrder']);
 });
 
 Route::middleware('auth:sanctum')->group(function () {

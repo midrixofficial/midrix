@@ -12,6 +12,13 @@
     categories
   } from './lib/brand.js';
   import { onMount } from 'svelte';
+  import axios from 'axios';
+
+  let customerName = '';
+  let customerPhone = '';
+  let deliveryAddress = '';
+  let submitError = '';
+  let isPlacingOrder = false;
 
   let isCheckout = window.location.pathname.includes('checkout');
   let themeMode = 'light';
@@ -143,6 +150,43 @@
     };
   });
 
+  const confirmOrder = async () => {
+    submitError = '';
+    if (!customerName || !customerPhone || !deliveryAddress) {
+      submitError = 'Please fill out all fields before swiping.';
+      return false;
+    }
+
+    isPlacingOrder = true;
+    try {
+      const itemsPayload = $cart.map(item => ({
+        product_name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        product_id: item.id.toString().startsWith('p') ? null : item.id
+      }));
+
+      const res = await axios.post('/api/open/orders', {
+        merchant_slug: window.merchantSlug || 'the-vellore-kitchen',
+        customer_name: customerName,
+        customer_phone: customerPhone,
+        delivery_address: deliveryAddress,
+        total_amount: $cartTotal,
+        items: itemsPayload
+      });
+
+      orderSuccess = true;
+      cart.clear();
+      return true;
+    } catch (err) {
+      console.error(err);
+      submitError = 'Failed to place order. Please try again.';
+      return false;
+    } finally {
+      isPlacingOrder = false;
+    }
+  };
+
   // ── Swipe-to-confirm ──
   function initSwipe() {
     const container = document.getElementById('swipe-confirm-container');
@@ -154,7 +198,7 @@
     const maxDist = () => container.offsetWidth - handle.offsetWidth - 8;
 
     const onStart = (e) => {
-      if (container.classList.contains('confirmed')) return;
+      if (container.classList.contains('confirmed') || isPlacingOrder) return;
       dragging = true;
       startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
       handle.style.transition = 'none';
@@ -173,12 +217,33 @@
       const m = maxDist();
       const mat = new WebKitCSSMatrix(getComputedStyle(handle).transform);
       if (mat.m41 >= m * 0.9) {
+        if (!customerName || !customerPhone || !deliveryAddress) {
+          submitError = 'Please fill out all fields before swiping.';
+          handle.style.transition = 'transform .3s ease-out';
+          handle.style.transform  = 'translateX(0px)';
+          textEl.style.opacity = '1';
+          return;
+        }
+
         handle.style.transition = 'transform .2s ease-out';
         handle.style.transform  = `translateX(${m}px)`;
         container.classList.add('confirmed');
-        textEl.textContent = 'Order Confirmed!';
-        handle.innerHTML = '<span class="material-symbols-outlined" style="color:#006d35">check</span>';
-        setTimeout(() => { orderSuccess = true; cart.clear(); }, 300);
+        textEl.textContent = 'Processing...';
+        handle.innerHTML = '<span class="material-symbols-outlined animate-spin" style="color:#006d35; font-size:16px;">sync</span>';
+
+        confirmOrder().then(success => {
+          if (success) {
+            textEl.textContent = 'Order Confirmed!';
+            handle.innerHTML = '<span class="material-symbols-outlined" style="color:#006d35">check</span>';
+          } else {
+            container.classList.remove('confirmed');
+            handle.style.transition = 'transform .3s ease-out';
+            handle.style.transform  = 'translateX(0px)';
+            textEl.style.opacity = '1';
+            textEl.textContent = 'Slide to Confirm →';
+            handle.innerHTML = '<span class="material-symbols-outlined" style="color:#a93100; font-size:18px;">chevron_right</span>';
+          }
+        });
       } else {
         handle.style.transition = 'transform .3s ease-out';
         handle.style.transform  = 'translateX(0px)';
@@ -491,6 +556,55 @@
           </div>
         </div>
       {/each}
+    </div>
+
+    <!-- Customer Details Form -->
+    <div class="section-label" style="margin-top:32px;">
+      <h2 class="section-title">Delivery Details</h2>
+      <p class="section-sub">Enter your details to confirm delivery</p>
+    </div>
+
+    <div class="bill-card card-shadow" style="padding: 16px;">
+      {#if submitError}
+        <div class="error-box">
+          {submitError}
+        </div>
+      {/if}
+
+      <div class="form-group">
+        <label class="form-label" for="customer-name">Full Name</label>
+        <input 
+          id="customer-name"
+          type="text" 
+          placeholder="Enter your name" 
+          class="form-input" 
+          bind:value={customerName}
+          disabled={isPlacingOrder}
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="customer-phone">Mobile Number</label>
+        <input 
+          id="customer-phone"
+          type="tel" 
+          placeholder="e.g. +91 98765 43210" 
+          class="form-input" 
+          bind:value={customerPhone}
+          disabled={isPlacingOrder}
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="delivery-addr">Delivery Address</label>
+        <textarea 
+          id="delivery-addr"
+          placeholder="Enter your street address, apartment, city" 
+          class="form-input form-textarea" 
+          bind:value={deliveryAddress}
+          disabled={isPlacingOrder}
+        ></textarea>
+      </div>
     </div>
 
     <!-- Payment Method -->
@@ -812,5 +926,53 @@
   }
   .skeleton-rec-btn {
     width: 54px; height: 28px; border-radius: 8px;
+  }
+
+  /* Checkout Form Styling */
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .form-group:last-child {
+    margin-bottom: 0;
+  }
+  .form-label {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+  }
+  .form-input {
+    width: 100%;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    color: var(--text-color);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-input:focus {
+    border-color: var(--primary);
+  }
+  .form-textarea {
+    resize: none;
+    height: 60px;
+  }
+  .error-box {
+    background: #fef3f2;
+    color: #b42318;
+    border: 1px solid #fecdca;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 12px;
   }
 </style>

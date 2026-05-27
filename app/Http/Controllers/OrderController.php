@@ -59,6 +59,80 @@ class OrderController extends Controller
         ]);
     }
 
+    public function storeOrder(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'merchant_slug' => ['required', 'string'],
+            'customer_name' => ['required', 'string', 'max:255'],
+            'customer_email' => ['nullable', 'string', 'email', 'max:255'],
+            'customer_phone' => ['required', 'string', 'max:20'],
+            'delivery_address' => ['required', 'string'],
+            'total_amount' => ['required', 'numeric', 'min:0'],
+            'items' => ['required', 'array', 'min:1'],
+            'items.*.product_name' => ['required', 'string'],
+            'items.*.price' => ['required', 'numeric', 'min:0'],
+            'items.*.quantity' => ['required', 'integer', 'min:1'],
+            'items.*.product_id' => ['nullable'],
+        ]);
+
+        $slug = $validated['merchant_slug'];
+        $merchant = \App\Models\Merchant::all()->first(function($m) use ($slug) {
+            return strtolower(preg_replace('/[^a-z0-9]+/i', '-', $m->business_name)) === $slug;
+        });
+
+        // Fallback to first merchant if none matches
+        if (!$merchant) {
+            $merchant = \App\Models\Merchant::first();
+        }
+
+        if (!$merchant) {
+            return response()->json(['message' => 'Merchant not found.'], 404);
+        }
+
+        // Generate ORD-XXXX format
+        $orderNumber = 'ORD-' . rand(1000, 9999);
+
+        // Ensure order_items table exists (per user prompt: "if there is no order_items table create once")
+        // In Laravel, if table was already dropped or doesn't exist, we can dynamically run schema logic to be completely foolproof!
+        if (!\Illuminate\Support\Facades\Schema::hasTable('order_items')) {
+            \Illuminate\Support\Facades\Schema::create('order_items', function ($table) {
+                $table->id();
+                $table->foreignId('order_id')->constrained()->onDelete('cascade');
+                $table->foreignId('product_id')->nullable()->constrained()->onDelete('set null');
+                $table->string('product_name');
+                $table->integer('quantity');
+                $table->decimal('price', 10, 2);
+                $table->timestamps();
+            });
+        }
+
+        $order = Order::create([
+            'user_id' => $merchant->user_id,
+            'order_number' => $orderNumber,
+            'customer_name' => $validated['customer_name'],
+            'customer_email' => $validated['customer_email'] ?? null,
+            'customer_phone' => $validated['customer_phone'],
+            'delivery_address' => $validated['delivery_address'],
+            'total_amount' => $validated['total_amount'],
+            'status' => 'Pending',
+        ]);
+
+        foreach ($validated['items'] as $item) {
+            OrderItem::create([
+                'order_id' => $order->id,
+                'product_id' => $item['product_id'] ?? null,
+                'product_name' => $item['product_name'],
+                'quantity' => $item['quantity'],
+                'price' => $item['price'],
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'Order placed successfully.',
+            'order' => $order->load('items')
+        ], 201);
+    }
+
     private function seedMockOrders($userId): void
     {
         $customers = [
