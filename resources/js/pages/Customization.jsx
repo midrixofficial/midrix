@@ -11,7 +11,7 @@ function Customization() {
     const [primaryColor, setPrimaryColor] = useState("#1a2231");
     const [secondaryColor, setSecondaryColor] = useState("#0ba5ec");
     const [categoryType, setCategoryType] = useState("image");
-    const [storeName, setStoreName] = useState("Midrix Store");
+    const [storeName, setStoreName] = useState("Akiolink Store");
     const [showStoreName, setShowStoreName] = useState(true);
 
     const activeDevice = deviceConfigs[device];

@@ -72,9 +72,9 @@ export default function SignUp({ onNavigate }) {
                 {/* Logo */}
                 <div className="relative flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-white font-bold text-lg">
-                        M
+                        A
                     </div>
-                    <span className="text-xl font-bold text-white tracking-tight">Midrix</span>
+                    <span className="text-xl font-bold text-white tracking-tight">Akiolink</span>
                 </div>
 
                 {/* Center content */}
@@ -88,7 +88,7 @@ export default function SignUp({ onNavigate }) {
                             Start selling smarter<br />today.
                         </h2>
                         <p className="text-[#8fa0b8] text-sm leading-relaxed max-w-xs">
-                            Join thousands of merchants who use Midrix to streamline their operations and grow their business.
+                            Join thousands of merchants who use Akiolink to streamline their operations and grow their business.
                         </p>
                     </div>
 
@@ -108,7 +108,7 @@ export default function SignUp({ onNavigate }) {
 
                 {/* Bottom */}
                 <div className="relative text-xs text-[#8fa0b8]">
-                    © {new Date().getFullYear()} Midrix. All rights reserved.
+                    © {new Date().getFullYear()} Akiolink. All rights reserved.
                 </div>
             </div>
 
@@ -118,9 +118,9 @@ export default function SignUp({ onNavigate }) {
                 {/* Mobile logo */}
                 <div className="mb-8 flex items-center gap-2.5 lg:hidden">
                     <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#1a2231] text-white font-bold text-base">
-                        M
+                        A
                     </div>
-                    <span className="text-lg font-bold text-[#1a2231]">Midrix</span>
+                    <span className="text-lg font-bold text-[#1a2231]">Akiolink</span>
                 </div>
 
                 <div className="w-full max-w-md">

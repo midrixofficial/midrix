@@ -49,9 +49,9 @@ export default function LinkGenerator({ onNavigate }) {
     const fetchMerchantData = async () => {
         try {
             const { data } = await axios.get("/api/merchant");
-            const tempBrandName = localStorage.getItem("midrix_temp_brand_name");
-            const tempBrandColor = localStorage.getItem("midrix_temp_brand_color");
-            const tempBrandTheme = localStorage.getItem("midrix_temp_brand_theme");
+            const tempBrandName = localStorage.getItem("akiolink_temp_brand_name");
+            const tempBrandColor = localStorage.getItem("akiolink_temp_brand_color");
+            const tempBrandTheme = localStorage.getItem("akiolink_temp_brand_theme");
 
             if (tempBrandTheme) {
                 setThemeMode(tempBrandTheme);
@@ -68,9 +68,9 @@ export default function LinkGenerator({ onNavigate }) {
                 }));
             }
         } catch (error) {
-            const tempBrandName = localStorage.getItem("midrix_temp_brand_name");
-            const tempBrandColor = localStorage.getItem("midrix_temp_brand_color");
-            const tempBrandTheme = localStorage.getItem("midrix_temp_brand_theme");
+            const tempBrandName = localStorage.getItem("akiolink_temp_brand_name");
+            const tempBrandColor = localStorage.getItem("akiolink_temp_brand_color");
+            const tempBrandTheme = localStorage.getItem("akiolink_temp_brand_theme");
 
             if (tempBrandTheme) {
                 setThemeMode(tempBrandTheme);
@@ -78,9 +78,9 @@ export default function LinkGenerator({ onNavigate }) {
 
             setCustomizer((prev) => ({
                 ...prev,
-                displayName: tempBrandName || "Midrix Store",
+                displayName: tempBrandName || "Akiolink Store",
                 brandColor: tempBrandColor || "#4f46e5",
-                slug: (tempBrandName || "Midrix Store").toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+                slug: (tempBrandName || "Akiolink Store").toLowerCase().replace(/[^a-z0-9]+/g, "-"),
                 businessAddress: "New Bangalore Service Road, No: 1, Near Green Circle, NH 46 Service Rd, Vellore, Tamil Nadu 632004",
             }));
         } finally {

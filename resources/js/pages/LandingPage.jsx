@@ -139,9 +139,9 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode, user })
 
     const handleClaimStore = () => {
         // Save temporary branding options to localStorage for seamless onboarding pre-fill
-        localStorage.setItem("midrix_temp_brand_name", storeName);
-        localStorage.setItem("midrix_temp_brand_color", brandColor);
-        localStorage.setItem("midrix_temp_brand_theme", themeMode);
+        localStorage.setItem("akiolink_temp_brand_name", storeName);
+        localStorage.setItem("akiolink_temp_brand_color", brandColor);
+        localStorage.setItem("akiolink_temp_brand_theme", themeMode);
         
         // Navigate to signup or dashboard
         onNavigate(user ? "/merchant/dashboard" : "/merchant/signup");
@@ -213,9 +213,9 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode, user })
                     {/* Logo */}
                     <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#1a2231] text-white dark:bg-white dark:text-[#1a2231] font-bold text-lg shadow-md shadow-indigo-500/10">
-                            M
+                            A
                         </div>
-                        <span className="text-xl font-bold text-[#1a2231] dark:text-white tracking-tight">Midrix</span>
+                        <span className="text-xl font-bold text-[#1a2231] dark:text-white tracking-tight">Akiolink</span>
                     </div>
 
                     {/* Navigation */}
@@ -394,7 +394,7 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode, user })
                                         <Share2 size={12} />
                                         <span>Portal URL:</span>
                                         <span className="font-semibold text-indigo-600 dark:text-indigo-400 truncate">
-                                            midrix.com/store/{slug || "my-store"}
+                                            akiolink.com/store/{slug || "my-store"}
                                         </span>
                                     </div>
                                 </div>
@@ -665,7 +665,7 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode, user })
                             </div>
                             <h3 className="text-lg font-bold text-[#1a2231] dark:text-white mb-2">Instant QR & Link Generator</h3>
                             <p className="text-sm text-[#667085] dark:text-slate-400 leading-relaxed">
-                                Secure your branded slug (e.g. `midrix.com/store/my-cafe`), and print dynamic QR codes for in-store dining or social sharing.
+                                Secure your branded slug (e.g. `akiolink.com/store/my-cafe`), and print dynamic QR codes for in-store dining or social sharing.
                             </p>
                         </div>
 
@@ -801,7 +801,7 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode, user })
                             Loved By Modern Businesses
                         </h2>
                         <p className="text-sm sm:text-base text-[#667085] dark:text-slate-400">
-                            See how local diners, artisanal coffee rosters, and bakers scale their operations with Midrix storefront solutions.
+                            See how local diners, artisanal coffee rosters, and bakers scale their operations with Akiolink storefront solutions.
                         </p>
                     </div>
 
@@ -833,7 +833,7 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode, user })
                                 {[...Array(5)].map((_, i) => <Star key={i} size={15} fill="currentColor" />)}
                             </div>
                             <p className="text-xs sm:text-sm text-[#344054] dark:text-slate-300 italic leading-relaxed">
-                                "I printed my custom menu QR code on all tables. Now, customers scan, order, and pay, and it goes straight to the live orders dashboard. Midrix saved us hours."
+                                "I printed my custom menu QR code on all tables. Now, customers scan, order, and pay, and it goes straight to the live orders dashboard. Akiolink saved us hours."
                             </p>
                             <div className="flex items-center gap-3 pt-2 border-t border-slate-100 dark:border-slate-800">
                                 <div className="h-9 w-9 rounded-full bg-emerald-500 text-white font-bold flex items-center justify-center text-xs">
@@ -887,7 +887,7 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode, user })
                     <div className="space-y-4">
                         {[
                             {
-                                q: "How much does Midrix cost?",
+                                q: "How much does Akiolink cost?",
                                 a: "You can sign up and build your storefront link completely for free. We do not charge transaction commissions or monthly listing fees, keeping your earnings 100% yours."
                             },
                             {
@@ -900,7 +900,7 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode, user })
                             },
                             {
                                 q: "How do I print the storefront QR codes?",
-                                a: "Midrix generates custom QR codes linked directly to your portal URL inside the dashboard settings. You can download and print them on posters, tables, menus, or receipts."
+                                a: "Akiolink generates custom QR codes linked directly to your portal URL inside the dashboard settings. You can download and print them on posters, tables, menus, or receipts."
                             }
                         ].map((faq, idx) => (
                             <div
@@ -961,12 +961,12 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode, user })
                         </h2>
                         
                         <p className="text-sm text-slate-300 leading-relaxed">
-                            Securing your customized link like `midrix.com/store/your-slug` takes less than 60 seconds. Launch your premium digital portal before someone else takes your name.
+                            Securing your customized link like `akiolink.com/store/your-slug` takes less than 60 seconds. Launch your premium digital portal before someone else takes your name.
                         </p>
 
                         <div className="flex flex-col sm:flex-row items-stretch justify-center gap-3 pt-4 max-w-md mx-auto">
                             <div className="flex rounded-xl bg-white/10 border border-white/15 px-3 py-3 items-center flex-1">
-                                <span className="text-xs font-semibold text-slate-400 select-none pr-1">midrix.com/store/</span>
+                                <span className="text-xs font-semibold text-slate-400 select-none pr-1">akiolink.com/store/</span>
                                 <input
                                     type="text"
                                     value={slug}
@@ -997,9 +997,9 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode, user })
                         <div className="space-y-4">
                             <div className="flex items-center gap-2.5">
                                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#1a2231] text-white dark:bg-white dark:text-[#1a2231] font-bold text-base shadow-sm">
-                                    M
+                                    A
                                 </div>
-                                <span className="text-lg font-bold text-[#1a2231] dark:text-white tracking-tight">Midrix</span>
+                                <span className="text-lg font-bold text-[#1a2231] dark:text-white tracking-tight">Akiolink</span>
                             </div>
                             <p className="text-xs text-[#667085] dark:text-slate-500 leading-relaxed max-w-xs">
                                 Turn menus and QR codes into beautiful, glassmorphic checkout experiences in 60 seconds. Sell smarter and accept direct local orders today.
@@ -1049,7 +1049,7 @@ export default function LandingPage({ onNavigate, darkMode, setDarkMode, user })
 
                     {/* Bottom Copyright */}
                     <div className="flex flex-col sm:flex-row items-center justify-between text-[11px] text-[#98a2b3] dark:text-slate-500">
-                        <span>© {new Date().getFullYear()} Midrix Inc. All rights reserved.</span>
+                        <span>© {new Date().getFullYear()} Akiolink Inc. All rights reserved.</span>
                         <div className="flex gap-4 mt-2 sm:mt-0">
                             <a href="#" className="hover:underline">Privacy Policy</a>
                             <a href="#" className="hover:underline">Terms of Service</a>

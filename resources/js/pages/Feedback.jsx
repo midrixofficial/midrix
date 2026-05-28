@@ -35,7 +35,7 @@ export default function Feedback({ onNavigate }) {
 
     // Load feedback from localStorage on mount
     useEffect(() => {
-        const savedFeedback = localStorage.getItem("midrix_feedback_history");
+        const savedFeedback = localStorage.getItem("akiolink_feedback_history");
         if (savedFeedback) {
             setHistory(JSON.parse(savedFeedback));
         } else {
@@ -50,7 +50,7 @@ export default function Feedback({ onNavigate }) {
                 },
             ];
             setHistory(sampleFeedback);
-            localStorage.setItem("midrix_feedback_history", JSON.stringify(sampleFeedback));
+            localStorage.setItem("akiolink_feedback_history", JSON.stringify(sampleFeedback));
         }
     }, []);
 
@@ -74,7 +74,7 @@ export default function Feedback({ onNavigate }) {
         setTimeout(() => {
             const updatedHistory = [newFeedback, ...history];
             setHistory(updatedHistory);
-            localStorage.setItem("midrix_feedback_history", JSON.stringify(updatedHistory));
+            localStorage.setItem("akiolink_feedback_history", JSON.stringify(updatedHistory));
 
             setSubmitting(false);
             setSuccessMsg("Thank you for your valuable feedback! We appreciate your support.");
@@ -89,7 +89,7 @@ export default function Feedback({ onNavigate }) {
     const handleDelete = (id) => {
         const updated = history.filter((item) => item.id !== id);
         setHistory(updated);
-        localStorage.setItem("midrix_feedback_history", JSON.stringify(updated));
+        localStorage.setItem("akiolink_feedback_history", JSON.stringify(updated));
     };
 
     const getEmojiForRating = (value) => {
@@ -111,7 +111,7 @@ export default function Feedback({ onNavigate }) {
                     <div>
                         <h1 className="text-2xl font-bold text-[#1a2231] dark:text-white">Share Feedback</h1>
                         <p className="mt-1 text-sm text-[#667085] dark:text-slate-400">
-                            We value your opinion. Help us improve Midrix by sharing your experiences and ideas.
+                            We value your opinion. Help us improve Akiolink by sharing your experiences and ideas.
                         </p>
                     </div>
                     <button

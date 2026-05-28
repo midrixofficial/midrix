@@ -48,7 +48,7 @@ export default function MerchantDetails({ onNavigate }) {
     const fetchMerchantDetails = async () => {
         try {
             const { data } = await axios.get("/api/merchant");
-            const tempBrandName = localStorage.getItem("midrix_temp_brand_name");
+            const tempBrandName = localStorage.getItem("akiolink_temp_brand_name");
             if (data.merchant) {
                 setForm({
                     name: data.merchant.name || "",
@@ -179,7 +179,7 @@ export default function MerchantDetails({ onNavigate }) {
                                                 value={form.business_name}
                                                 onChange={handleChange}
                                                 required
-                                                placeholder="e.g. Midrix Solutions"
+                                                placeholder="e.g. Akiolink Solutions"
                                                 className={inputClass}
                                             />
                                         </FormField>

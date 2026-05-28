@@ -109,10 +109,10 @@ function Sidebar({ sidebarOpen, setSidebarOpen, selectedMenu, onNavigate }) {
                 <div className="flex items-center justify-between px-5 py-5 border-b border-[#e4e7ec] dark:border-slate-800">
                     <div className="flex items-center gap-2.5">
                         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#1a2231] dark:bg-white text-white dark:text-[#1a2231] text-sm font-bold">
-                            M
+                            A
                         </div>
                         <span className="text-lg font-bold tracking-tight text-[#1a2231] dark:text-white">
-                            Midrix
+                            Akiolink
                         </span>
                     </div>
                     <button

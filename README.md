@@ -1,6 +1,6 @@
-# Merchant Ordering Platform (Midrix)
+# Merchant Ordering Platform (Akiolink)
 
-Welcome to Midrix, a complete restaurant and merchant ordering platform where sellers can manage products, categories, customized branding, view analytics, and generate a dynamic public ordering link for customers.
+Welcome to Akiolink, a complete restaurant and merchant ordering platform where sellers can manage products, categories, customized branding, view analytics, and generate a dynamic public ordering link for customers.
 
 ## Tech Stack
 * **Backend**: Laravel 13 (REST API, Sanctum Auth, SQLite/MySQL, Eloquent)
